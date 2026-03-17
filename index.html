@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AnnexLink | Login</title>
+    <!-- We will add the favicon link here later when you provide the image -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="auth-wrapper">
+        <div class="auth-card">
+            <!-- We will replace this text with the logo image later -->
+            <h1 class="logo-text">Annex<span>Link</span></h1>
+            <p>Peer-to-peer service marketplace for BUP students.</p>
+            
+            <div class="auth-tabs">
+                <button class="auth-tab active" id="tab-login" onclick="toggleAuth('login')">Login</button>
+                <button class="auth-tab" id="tab-register" onclick="toggleAuth('register')">Register</button>
+            </div>
+
+            <!-- Login Form -->
+            <form id="form-login" class="auth-form" onsubmit="handleLogin(event)">
+                <div>
+                    <label>University Email</label>
+                    <input type="email" placeholder="name@student.bup.edu.bd" required pattern=".+@student\.bup\.edu\.bd" title="Please use your @student.bup.edu.bd email">
+                </div>
+                <div>
+                    <label>Password</label>
+                    <input type="password" placeholder="Enter your password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Login to AnnexFeed</button>
+            </form>
+
+            <!-- Register Form -->
+            <form id="form-register" class="auth-form hidden" onsubmit="handleRegister(event)">
+                <div>
+                    <label>Full Name</label>
+                    <input type="text" placeholder="e.g. Rakib Hasan" required>
+                </div>
+                <div>
+                    <label>University Email</label>
+                    <input type="email" placeholder="name@student.bup.edu.bd" required pattern=".+@student\.bup\.edu\.bd" title="Please use your @student.bup.edu.bd email">
+                </div>
+                <div class="input-row">
+                    <div>
+                        <label>Department</label>
+                        <input type="text" placeholder="e.g. CSE" required>
+                    </div>
+                    <div>
+                        <label>Batch</label>
+                        <input type="text" placeholder="e.g. 2021" required>
+                    </div>
+                </div>
+                <div>
+                    <label>Top Skills (Tags)</label>
+                    <input type="text" placeholder="e.g. Design, Python, Writing">
+                </div>
+                <div>
+                    <label>Password</label>
+                    <input type="password" placeholder="Create a password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Create Account</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+</body>
+</html>

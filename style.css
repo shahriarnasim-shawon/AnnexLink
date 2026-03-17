@@ -1,0 +1,143 @@
+/* --- Global Variables & Color Palette --- */
+:root {
+    --primary-navy: #0A192F;
+    --secondary-navy: #112240;
+    --accent-teal: #20B2AA;
+    --accent-teal-hover: #178B85;
+    --accent-orange: #FF8C00;
+    --bg-color: #F4F7F6;
+    --card-bg: #FFFFFF;
+    --text-main: #333333;
+    --text-muted: #777777;
+    --border-color: #E0E0E0;
+    --shadow: 0 4px 12px rgba(0,0,0,0.08);
+    --radius: 12px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-main);
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* --- Typography & Buttons --- */
+.logo-text {
+    color: var(--primary-navy);
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.logo-text span {
+    color: var(--accent-teal);
+}
+
+.btn {
+    padding: 0.8rem 1.2rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.3s;
+    width: 100%;
+}
+
+.btn-primary {
+    background: var(--accent-teal);
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background: var(--accent-teal-hover);
+}
+
+/* --- Authentication Layout --- */
+.auth-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 1rem;
+}
+
+.auth-card {
+    background: var(--card-bg);
+    padding: 2.5rem;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    width: 100%;
+    max-width: 450px;
+    text-align: center;
+}
+
+.auth-card p {
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+}
+
+.auth-tabs {
+    display: flex;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.auth-tab {
+    flex: 1;
+    padding: 0.8rem;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-weight: bold;
+    color: var(--text-muted);
+    font-size: 1rem;
+}
+
+.auth-tab.active {
+    color: var(--accent-teal);
+    border-bottom: 3px solid var(--accent-teal);
+}
+
+/* --- Form Styles --- */
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    text-align: left;
+}
+
+.auth-form label {
+    font-size: 0.9rem;
+    color: var(--primary-navy);
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+    display: block;
+}
+
+.auth-form input {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    outline: none;
+    font-size: 1rem;
+}
+
+.auth-form input:focus {
+    border-color: var(--accent-teal);
+    box-shadow: 0 0 0 3px rgba(32, 178, 170, 0.2);
+}
+
+.input-row {
+    display: flex;
+    gap: 1rem;
+}
