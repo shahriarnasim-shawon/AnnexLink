@@ -116,3 +116,43 @@ li { list-style: none; }
     .post-actions button { width: 100%; }
     .post-footer { flex-direction: column; align-items: flex-start; gap: 1rem; }
 }
+/* --- Step 3: Profile Page Styles --- */
+.profile-container { grid-template-columns: 240px 1fr; } /* 2-column layout for more space */
+
+.profile-header-card { background: var(--card-bg); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); margin-bottom: 2rem; }
+.profile-cover { background: linear-gradient(135deg, var(--primary-navy) 0%, var(--accent-teal) 100%); height: 150px; width: 100%; }
+.profile-info { padding: 0 2rem 2rem 2rem; position: relative; display: flex; flex-direction: column; align-items: center; text-align: center; }
+.profile-avatar { width: 120px; height: 120px; border-radius: 50%; border: 4px solid var(--card-bg); margin-top: -60px; background: var(--bg-color); object-fit: cover; }
+.profile-name { font-size: 1.8rem; color: var(--primary-navy); margin-top: 1rem; }
+.profile-meta { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1rem; }
+.profile-bio { max-width: 600px; margin: 0 auto 1.5rem auto; line-height: 1.6; color: var(--text-main); }
+.profile-stats { display: flex; gap: 2rem; margin-bottom: 1.5rem; }
+.stat-item { text-align: center; }
+.stat-item h3 { color: var(--primary-navy); font-size: 1.2rem; }
+.stat-item p { color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; }
+
+.section-title { color: var(--primary-navy); margin-bottom: 1rem; font-size: 1.3rem; border-bottom: 2px solid var(--border-color); padding-bottom: 0.5rem; }
+.review-card { background: var(--card-bg); border-radius: var(--radius); padding: 1.5rem; box-shadow: var(--shadow); margin-bottom: 1rem; }
+.review-header { display: flex; justify-content: space-between; margin-bottom: 0.5rem; }
+
+/* --- Step 3: Dashboard Styles --- */
+.dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+.dash-card { background: var(--card-bg); border-radius: var(--radius); padding: 1.5rem; box-shadow: var(--shadow); display: flex; align-items: center; gap: 1.5rem; border-left: 4px solid var(--accent-teal); }
+.dash-card.orange { border-left-color: var(--accent-orange); }
+.dash-card.navy { border-left-color: var(--primary-navy); }
+.dash-icon { background: var(--bg-color); width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: var(--accent-teal); }
+.dash-card.orange .dash-icon { color: var(--accent-orange); }
+.dash-card.navy .dash-icon { color: var(--primary-navy); }
+.dash-info h3 { font-size: 1.8rem; color: var(--primary-navy); }
+.dash-info p { color: var(--text-muted); font-size: 0.9rem; font-weight: 500; }
+
+.table-container { background: var(--card-bg); border-radius: var(--radius); padding: 1.5rem; box-shadow: var(--shadow); overflow-x: auto; }
+.activity-table { width: 100%; border-collapse: collapse; text-align: left; }
+.activity-table th, .activity-table td { padding: 1rem; border-bottom: 1px solid var(--border-color); }
+.activity-table th { color: var(--text-muted); font-weight: 600; font-size: 0.9rem; text-transform: uppercase; }
+.activity-table tr:last-child td { border-bottom: none; }
+.status { padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.8rem; font-weight: bold; }
+.status.pending { background: rgba(255, 140, 0, 0.15); color: var(--accent-orange); }
+.status.completed { background: rgba(32, 178, 170, 0.15); color: var(--accent-teal); }
+.status.active { background: rgba(10, 25, 47, 0.1); color: var(--primary-navy); }
+

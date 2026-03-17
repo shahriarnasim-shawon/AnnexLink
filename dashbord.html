@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AnnexLink | Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- Top Navbar -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="feed.html" class="logo-text">Annex<span>Link</span></a>
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search services, skills, users...">
+            </div>
+        </div>
+        <div class="nav-right">
+            <div class="icon-btn"><i class="fas fa-bell"></i><span class="badge">3</span></div>
+            <div class="icon-btn"><i class="fas fa-envelope"></i><span class="badge">1</span></div>
+            <img src="https://ui-avatars.com/api/?name=Rakib+Hasan&background=0A192F&color=fff" alt="Profile" class="avatar">
+        </div>
+    </nav>
+
+    <!-- Main Layout Container (2 Columns for Dashboard) -->
+    <div class="container profile-container">
+        
+        <!-- Left Sidebar Navigation -->
+        <aside class="sidebar left-sidebar">
+            <ul class="nav-links">
+                <li><a href="feed.html"><i class="fas fa-home"></i> AnnexFeed</a></li>
+                <li><a href="profile.html"><i class="fas fa-user"></i> Profile</a></li>
+                <li><a href="#"><i class="fas fa-briefcase"></i> My Services</a></li>
+                <li><a href="#"><i class="fas fa-clipboard-list"></i> My Requests</a></li>
+                <li><a href="#"><i class="fas fa-comment-dots"></i> Messages</a></li>
+                <li class="active"><a href="dashboard.html"><i class="fas fa-chart-pie"></i> Dashboard</a></li>
+                <li><a href="index.html" style="color: #E63946;"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Dashboard Area -->
+        <main class="dashboard-content">
+            <h2 class="section-title" style="border: none;">Welcome back, Rakib! 👋</h2>
+            
+            <!-- Statistics Cards -->
+            <div class="dashboard-grid">
+                <div class="dash-card">
+                    <div class="dash-icon"><i class="fas fa-briefcase"></i></div>
+                    <div class="dash-info">
+                        <h3>3</h3>
+                        <p>Active Services</p>
+                    </div>
+                </div>
+                <div class="dash-card orange">
+                    <div class="dash-icon"><i class="fas fa-hourglass-half"></i></div>
+                    <div class="dash-info">
+                        <h3>2</h3>
+                        <p>Pending Applications</p>
+                    </div>
+                </div>
+                <div class="dash-card navy">
+                    <div class="dash-icon"><i class="fas fa-wallet"></i></div>
+                    <div class="dash-info">
+                        <h3>৳ 12,500</h3>
+                        <p>Earned this Month</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity Table -->
+            <h3 class="section-title">Recent Activity</h3>
+            <div class="table-container">
+                <table class="activity-table">
+                    <thead>
+                        <tr>
+                            <th>Post Title</th>
+                            <th>Type</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>UI/UX Design for Mobile App</strong></td>
+                            <td>Application</td>
+                            <td>Oct 12, 2023</td>
+                            <td><span class="status pending">Pending</span></td>
+                            <td><button class="btn btn-outline" style="padding: 0.4rem 0.8rem;">View</button></td>
+                        </tr>
+                        <tr>
+                            <td><strong>I will build a responsive website</strong></td>
+                            <td>My Service</td>
+                            <td>Oct 10, 2023</td>
+                            <td><span class="status active">Active</span></td>
+                            <td><button class="btn btn-outline" style="padding: 0.4rem 0.8rem;">Edit</button></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Need tutor for Data Structures</strong></td>
+                            <td>Hired</td>
+                            <td>Oct 05, 2023</td>
+                            <td><span class="status completed">Completed</span></td>
+                            <td><button class="btn btn-outline" style="padding: 0.4rem 0.8rem;">Review</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </main>
+    </div>
+
+</body>
+</html>

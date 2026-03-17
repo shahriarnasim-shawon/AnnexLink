@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AnnexLink | My Profile</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- Top Navbar -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="feed.html" class="logo-text">Annex<span>Link</span></a>
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search services, skills, users...">
+            </div>
+        </div>
+        <div class="nav-right">
+            <div class="icon-btn"><i class="fas fa-bell"></i><span class="badge">3</span></div>
+            <div class="icon-btn"><i class="fas fa-envelope"></i><span class="badge">1</span></div>
+            <img src="https://ui-avatars.com/api/?name=Rakib+Hasan&background=0A192F&color=fff" alt="Profile" class="avatar">
+        </div>
+    </nav>
+
+    <!-- Main Layout Container (2 Columns for Profile) -->
+    <div class="container profile-container">
+        
+        <!-- Left Sidebar Navigation -->
+        <aside class="sidebar left-sidebar">
+            <ul class="nav-links">
+                <li><a href="feed.html"><i class="fas fa-home"></i> AnnexFeed</a></li>
+                <li class="active"><a href="profile.html"><i class="fas fa-user"></i> Profile</a></li>
+                <li><a href="#"><i class="fas fa-briefcase"></i> My Services</a></li>
+                <li><a href="#"><i class="fas fa-clipboard-list"></i> My Requests</a></li>
+                <li><a href="#"><i class="fas fa-comment-dots"></i> Messages</a></li>
+                <li><a href="dashboard.html"><i class="fas fa-chart-pie"></i> Dashboard</a></li>
+                <li><a href="index.html" style="color: #E63946;"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Profile Area -->
+        <main class="profile-content">
+            
+            <!-- Profile Header -->
+            <div class="profile-header-card">
+                <div class="profile-cover"></div>
+                <div class="profile-info">
+                    <img src="https://ui-avatars.com/api/?name=Rakib+Hasan&background=0A192F&color=fff" alt="Rakib Hasan" class="profile-avatar">
+                    <h2 class="profile-name">Rakib Hasan</h2>
+                    <p class="profile-meta">CSE Department • Batch 2021 • name@student.bup.edu.bd</p>
+                    
+                    <div class="profile-stats">
+                        <div class="stat-item"><h3>⭐ 4.8</h3><p>Rating</p></div>
+                        <div class="stat-item"><h3>15</h3><p>Reviews</p></div>
+                        <div class="stat-item"><h3>8</h3><p>Services Done</p></div>
+                    </div>
+
+                    <p class="profile-bio">
+                        Hi! I am a passionate Web Developer and Graphic Designer. I love helping fellow students with their final year projects, UI/UX designs, and setting up scalable web applications. Feel free to reach out!
+                    </p>
+
+                    <div class="tags" style="justify-content: center; margin-bottom: 1.5rem;">
+                        <span class="tag">Web Design</span>
+                        <span class="tag">JavaScript</span>
+                        <span class="tag">React.js</span>
+                        <span class="tag">Figma</span>
+                    </div>
+
+                    <div class="post-actions">
+                        <button class="btn btn-outline"><i class="fas fa-share-alt"></i> Share Profile</button>
+                        <button class="btn btn-primary"><i class="fas fa-edit"></i> Edit Profile</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reviews Section -->
+            <h3 class="section-title">Recent Reviews</h3>
+            
+            <div class="review-card">
+                <div class="review-header">
+                    <div class="user-info">
+                        <img src="https://ui-avatars.com/api/?name=Ayesha+Siddiqa&background=20B2AA&color=fff" class="avatar" style="width: 30px; height: 30px;">
+                        <h4>Ayesha Siddiqa</h4>
+                    </div>
+                    <span style="color: var(--accent-orange);">⭐⭐⭐⭐⭐</span>
+                </div>
+                <p class="post-desc" style="margin-bottom: 0;">"Rakib did an amazing job on our web project! Delivered exactly what we needed before the deadline. Highly recommended!"</p>
+            </div>
+
+            <div class="review-card">
+                <div class="review-header">
+                    <div class="user-info">
+                        <img src="https://ui-avatars.com/api/?name=Fahim+Rahman&background=FF8C00&color=fff" class="avatar" style="width: 30px; height: 30px;">
+                        <h4>Fahim Rahman</h4>
+                    </div>
+                    <span style="color: var(--accent-orange);">⭐⭐⭐⭐</span>
+                </div>
+                <p class="post-desc" style="margin-bottom: 0;">"Great communication and solid coding skills. Helped me fix a major bug in my React app."</p>
+            </div>
+
+        </main>
+    </div>
+
+</body>
+</html>

@@ -2,7 +2,7 @@
 const feedData =[
     {
         id: 1,
-        user: "Tanjim Ahmed",
+        user: "Sadman Sakib",
         rating: "4.9",
         avatar: "https://ui-avatars.com/api/?name=Tanjim+Ahmed&background=20B2AA&color=fff",
         type: "Service", // Can be Service, Hiring, or Request
@@ -14,7 +14,7 @@ const feedData =[
     },
     {
         id: 2,
-        user: "Nafisa Yasmin",
+        user: "Farzana Hossain Mimi",
         rating: "4.7",
         avatar: "https://ui-avatars.com/api/?name=Nafisa+Yasmin&background=FF8C00&color=fff",
         type: "Hiring",
@@ -26,7 +26,7 @@ const feedData =[
     },
     {
         id: 3,
-        user: "Samiul Haque",
+        user: "Md Shahriar Nasim Shawon",
         rating: "New",
         avatar: "https://ui-avatars.com/api/?name=Samiul+Haque&background=0A192F&color=fff",
         type: "Request",
