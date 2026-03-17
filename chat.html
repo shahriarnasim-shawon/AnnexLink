@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AnnexLink | Messages</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- Top Navbar with Updated Notifications Dropdown -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="feed.html" class="logo-text">Annex<span>Link</span></a>
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search services, skills, users...">
+            </div>
+        </div>
+        <div class="nav-right">
+            
+            <!-- Notifications Wrapper -->
+            <div class="notification-wrapper">
+                <div class="icon-btn" id="notif-bell" onclick="toggleNotifications()">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge">2</span>
+                </div>
+                
+                <!-- Notification Dropdown -->
+                <div class="notification-dropdown" id="notif-dropdown">
+                    <div class="notif-header">
+                        <h3>Notifications</h3>
+                        <span class="mark-read">Mark all as read</span>
+                    </div>
+                    <div class="notif-list">
+                        <div class="notif-item unread">
+                            <div class="notif-icon-circle" style="background: var(--accent-teal);"><i class="fas fa-comment-dots"></i></div>
+                            <div class="notif-info">
+                                <p><strong>Ayesha Siddiqa</strong> sent you a new message.</p>
+                                <span class="notif-time">10 minutes ago</span>
+                            </div>
+                        </div>
+                        <div class="notif-item unread">
+                            <div class="notif-icon-circle" style="background: var(--accent-orange);"><i class="fas fa-star"></i></div>
+                            <div class="notif-info">
+                                <p><strong>Fahim Rahman</strong> left a 5-star review on your service!</p>
+                                <span class="notif-time">2 hours ago</span>
+                            </div>
+                        </div>
+                        <div class="notif-item">
+                            <div class="notif-icon-circle" style="background: var(--primary-navy);"><i class="fas fa-briefcase"></i></div>
+                            <div class="notif-info">
+                                <p>Your application for <strong>"UI/UX Design"</strong> is under review.</p>
+                                <span class="notif-time">Yesterday</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="icon-btn"><i class="fas fa-envelope"></i></div>
+            <img src="https://ui-avatars.com/api/?name=Rakib+Hasan&background=0A192F&color=fff" alt="Profile" class="avatar">
+        </div>
+    </nav>
+
+    <!-- Main Layout Container (2 Columns) -->
+    <div class="container profile-container">
+        
+        <!-- Left Sidebar Navigation -->
+        <aside class="sidebar left-sidebar">
+            <ul class="nav-links">
+                <li><a href="feed.html"><i class="fas fa-home"></i> AnnexFeed</a></li>
+                <li><a href="profile.html"><i class="fas fa-user"></i> Profile</a></li>
+                <li><a href="#"><i class="fas fa-briefcase"></i> My Services</a></li>
+                <li><a href="#"><i class="fas fa-clipboard-list"></i> My Requests</a></li>
+                <li class="active"><a href="chat.html"><i class="fas fa-comment-dots"></i> Messages</a></li>
+                <li><a href="dashboard.html"><i class="fas fa-chart-pie"></i> Dashboard</a></li>
+                <li><a href="index.html" style="color: #E63946;"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Chat Area -->
+        <main class="chat-container">
+            
+            <!-- Conversations Sidebar -->
+            <div class="chat-sidebar">
+                <div class="chat-search">
+                    <input type="text" placeholder="Search messages...">
+                </div>
+                <div class="chat-list">
+                    <!-- Active User -->
+                    <div class="chat-user active">
+                        <img src="https://ui-avatars.com/api/?name=Ayesha+Siddiqa&background=20B2AA&color=fff" class="avatar">
+                        <div class="chat-user-info">
+                            <h4>Ayesha Siddiqa <span class="chat-time">10:42 AM</span></h4>
+                            <p class="chat-preview">Are you available for a quick meeting?</p>
+                        </div>
+                    </div>
+                    <!-- Other User -->
+                    <div class="chat-user">
+                        <img src="https://ui-avatars.com/api/?name=Samiul+Haque&background=0A192F&color=fff" class="avatar">
+                        <div class="chat-user-info">
+                            <h4>Samiul Haque <span class="chat-time">Yesterday</span></h4>
+                            <p class="chat-preview">Thanks for helping me with DSA!</p>
+                        </div>
+                    </div>
+                    <!-- Other User -->
+                    <div class="chat-user">
+                        <img src="https://ui-avatars.com/api/?name=Nafisa+Yasmin&background=FF8C00&color=fff" class="avatar">
+                        <div class="chat-user-info">
+                            <h4>Nafisa Yasmin <span class="chat-time">Tuesday</span></h4>
+                            <p class="chat-preview">Can you send the Figma file?</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Window -->
+            <div class="chat-window">
+                <div class="chat-header">
+                    <div class="chat-header-info">
+                        <img src="https://ui-avatars.com/api/?name=Ayesha+Siddiqa&background=20B2AA&color=fff" class="avatar">
+                        <div>
+                            <h3>Ayesha Siddiqa</h3>
+                            <p>Online</p>
+                        </div>
+                    </div>
+                    <div class="icon-btn"><i class="fas fa-ellipsis-v"></i></div>
+                </div>
+                
+                <div class="chat-messages" id="chat-box">
+                    <div class="message received">
+                        Hi Rakib! I saw your profile on AnnexLink.
+                        <span class="message-time">10:30 AM</span>
+                    </div>
+                    <div class="message sent">
+                        Hello Ayesha! Yes, how can I help you today?
+                        <span class="message-time">10:35 AM</span>
+                    </div>
+                    <div class="message received">
+                        We need a developer for our final year project. Are you available for a quick meeting?
+                        <span class="message-time">10:42 AM</span>
+                    </div>
+                </div>
+
+                <div class="chat-input-area">
+                    <input type="text" id="message-input" placeholder="Type your message here..." onkeypress="handleKeyPress(event)">
+                    <button class="btn-send" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Script for Chat & Notifications -->
+    <script src="chat.js"></script>
+</body>
+</html>
