@@ -58,4 +58,20 @@ function handleKeyPress(event) {
 function simulateReply() {
     const chatBox = document.getElementById('chat-box');
     const now = new Date();
-    const timeString = now.toLocaleTimeString(
+    const timeString = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+
+    // Create message element for the received message
+    const replyDiv = document.createElement('div');
+    replyDiv.classList.add('message', 'received');
+    
+    replyDiv.innerHTML = `
+        That sounds great! Let me review the details and get back to you shortly.
+        <span class="message-time">${timeString}</span>
+    `;
+
+    // Append to chat box
+    chatBox.appendChild(replyDiv);
+
+    // Auto-scroll to bottom
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
