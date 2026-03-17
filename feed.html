@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AnnexLink | AnnexFeed</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- Top Navbar -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="feed.html" class="logo-text">Annex<span>Link</span></a>
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search services, skills, users...">
+            </div>
+        </div>
+        <div class="nav-right">
+            <div class="icon-btn">
+                <i class="fas fa-bell"></i>
+                <span class="badge">3</span>
+            </div>
+            <div class="icon-btn">
+                <i class="fas fa-envelope"></i>
+                <span class="badge">1</span>
+            </div>
+            <img src="https://ui-avatars.com/api/?name=Rakib+Hasan&background=0A192F&color=fff" alt="Profile" class="avatar">
+        </div>
+    </nav>
+
+    <!-- Main Layout Container -->
+    <div class="container">
+        
+        <!-- Left Sidebar Navigation -->
+        <aside class="sidebar left-sidebar">
+            <ul class="nav-links">
+                <li class="active"><a href="feed.html"><i class="fas fa-home"></i> AnnexFeed</a></li>
+                <li><a href="#"><i class="fas fa-user"></i> Profile</a></li>
+                <li><a href="#"><i class="fas fa-briefcase"></i> My Services</a></li>
+                <li><a href="#"><i class="fas fa-clipboard-list"></i> My Requests</a></li>
+                <li><a href="#"><i class="fas fa-comment-dots"></i> Messages</a></li>
+                <li><a href="#"><i class="fas fa-chart-pie"></i> Dashboard</a></li>
+                <li><a href="index.html" style="color: #E63946;"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Feed Area -->
+        <main class="feed-content">
+            <!-- Create Post Box -->
+            <div class="create-post">
+                <img src="https://ui-avatars.com/api/?name=Rakib+Hasan&background=0A192F&color=fff" alt="User" class="avatar">
+                <input type="text" placeholder="Offer a service, hire someone, or make a request...">
+                <button class="btn btn-primary"><i class="fas fa-pen"></i> Post</button>
+            </div>
+
+            <!-- Posts will be injected here via JavaScript -->
+            <div id="annex-feed"></div>
+        </main>
+
+        <!-- Right Sidebar Widgets -->
+        <aside class="sidebar right-sidebar">
+            <div class="widget">
+                <h3>Suggested Services</h3>
+                <ul class="widget-list">
+                    <li>
+                        <div>
+                            <strong>UI/UX Design</strong>
+                            <p class="text-sm">by Ayesha Siddiqa</p>
+                        </div>
+                        <span class="text-sm">⭐ 4.9</span>
+                    </li>
+                    <li>
+                        <div>
+                            <strong>Java Tutoring</strong>
+                            <p class="text-sm">by Fahim Rahman</p>
+                        </div>
+                        <span class="text-sm">⭐ 4.7</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="widget">
+                <h3>Trending Categories</h3>
+                <div class="tags" style="margin-bottom: 0;">
+                    <span class="tag">Web Development</span>
+                    <span class="tag">Video Editing</span>
+                    <span class="tag">Content Writing</span>
+                    <span class="tag">Data Analysis</span>
+                    <span class="tag">Photography</span>
+                </div>
+            </div>
+        </aside>
+
+    </div>
+
+    <!-- Script to render the feed dynamically -->
+    <script src="feed.js"></script>
+</body>
+</html>
