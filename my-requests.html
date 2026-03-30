@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AnnexLink | My Requests</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- Top Navbar -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="feed.html" class="logo-text">Annex<span>Link</span></a>
+        </div>
+        <div class="nav-right">
+            <div class="icon-btn"><i class="fas fa-bell"></i><span class="badge">3</span></div>
+            <a href="chat.html" class="icon-btn"><i class="fas fa-envelope"></i></a>
+            <img src="https://ui-avatars.com/api/?name=Rakib+Hasan&background=0A192F&color=fff" alt="Profile" class="avatar">
+        </div>
+    </nav>
+
+    <!-- Main Layout Container (2 Columns) -->
+    <div class="container profile-container">
+        
+        <!-- Left Sidebar Navigation -->
+        <aside class="sidebar left-sidebar">
+            <ul class="nav-links">
+                <li><a href="feed.html"><i class="fas fa-home"></i> AnnexFeed</a></li>
+                <li><a href="profile.html"><i class="fas fa-user"></i> Profile</a></li>
+                <li><a href="my-services.html"><i class="fas fa-briefcase"></i> My Services</a></li>
+                <li class="active"><a href="my-requests.html"><i class="fas fa-clipboard-list"></i> My Requests</a></li>
+                <li><a href="chat.html"><i class="fas fa-comment-dots"></i> Messages</a></li>
+                <li><a href="dashboard.html"><i class="fas fa-chart-pie"></i> Dashboard</a></li>
+                <li><a href="index.html" style="color: #E63946;"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="management-content">
+            
+            <div class="page-header">
+                <h2>My Requests & Hiring Posts</h2>
+                <button class="btn btn-primary"><i class="fas fa-plus"></i> Post a Request</button>
+            </div>
+
+            <!-- Request Card 1 -->
+            <div class="manage-card request">
+                <div class="manage-card-header">
+                    <h3 class="manage-card-title">Looking for a UI/UX Designer for a Mobile App</h3>
+                    <span class="status-badge status-active">Open</span>
+                </div>
+                <p class="post-desc">We are participating in a hackathon and need someone proficient in Figma to design 10-12 screens. Budget is negotiable based on your portfolio.</p>
+                
+                <div class="manage-meta">
+                    <div><i class="fas fa-tag"></i> Hiring, Figma</div>
+                    <div><i class="fas fa-money-bill-wave"></i> Budget: ৳ 3,000</div>
+                    <div><i class="fas fa-clock"></i> Posted 3 days ago</div>
+                </div>
+
+                <div class="manage-actions">
+                    <button class="btn btn-primary">
+                        <i class="fas fa-users"></i> View Applicants 
+                        <span class="applicant-badge">4</span>
+                    </button>
+                    <button class="btn btn-outline"><i class="fas fa-edit"></i> Edit</button>
+                    <button class="btn-small btn-delete" style="margin-left: auto;"><i class="fas fa-times-circle"></i> Close Request</button>
+                </div>
+            </div>
+
+            <!-- Request Card 2 -->
+            <div class="manage-card request">
+                <div class="manage-card-header">
+                    <h3 class="manage-card-title">Need a tutor for Data Structures & Algorithms</h3>
+                    <span class="status-badge status-active">Open</span>
+                </div>
+                <p class="post-desc">Having trouble understanding graph algorithms. Looking for a senior who can sit with me for a few hours before midterms.</p>
+                
+                <div class="manage-meta">
+                    <div><i class="fas fa-tag"></i> Tutoring, DSA</div>
+                    <div><i class="fas fa-money-bill-wave"></i> Budget: ৳ 500/hr</div>
+                    <div><i class="fas fa-clock"></i> Posted 1 week ago</div>
+                </div>
+
+                <div class="manage-actions">
+                    <button class="btn btn-primary">
+                        <i class="fas fa-users"></i> View Offers 
+                        <span class="applicant-badge">1</span>
+                    </button>
+                    <button class="btn btn-outline"><i class="fas fa-edit"></i> Edit</button>
+                    <button class="btn-small btn-delete" style="margin-left: auto;"><i class="fas fa-times-circle"></i> Close Request</button>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+</body>
+</html>

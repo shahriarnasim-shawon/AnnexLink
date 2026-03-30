@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AnnexLink | My Services</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- Top Navbar -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="feed.html" class="logo-text">Annex<span>Link</span></a>
+        </div>
+        <div class="nav-right">
+            <div class="icon-btn"><i class="fas fa-bell"></i><span class="badge">3</span></div>
+            <a href="chat.html" class="icon-btn"><i class="fas fa-envelope"></i></a>
+            <img src="https://ui-avatars.com/api/?name=Rakib+Hasan&background=0A192F&color=fff" alt="Profile" class="avatar">
+        </div>
+    </nav>
+
+    <!-- Main Layout Container (2 Columns) -->
+    <div class="container profile-container">
+        
+        <!-- Left Sidebar Navigation -->
+        <aside class="sidebar left-sidebar">
+            <ul class="nav-links">
+                <li><a href="feed.html"><i class="fas fa-home"></i> AnnexFeed</a></li>
+                <li><a href="profile.html"><i class="fas fa-user"></i> Profile</a></li>
+                <li class="active"><a href="my-services.html"><i class="fas fa-briefcase"></i> My Services</a></li>
+                <li><a href="my-requests.html"><i class="fas fa-clipboard-list"></i> My Requests</a></li>
+                <li><a href="chat.html"><i class="fas fa-comment-dots"></i> Messages</a></li>
+                <li><a href="dashboard.html"><i class="fas fa-chart-pie"></i> Dashboard</a></li>
+                <li><a href="index.html" style="color: #E63946;"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="management-content">
+            
+            <div class="page-header">
+                <h2>My Active Services</h2>
+                <button class="btn btn-primary"><i class="fas fa-plus"></i> Add New Service</button>
+            </div>
+
+            <!-- Service Card 1 -->
+            <div class="manage-card">
+                <div class="manage-card-header">
+                    <h3 class="manage-card-title">I will build a responsive Full-Stack website</h3>
+                    <span class="status-badge status-active">Active</span>
+                </div>
+                <p class="post-desc">Experienced with MERN stack. I can build fast, responsive, and scalable web applications for your final year projects or startups.</p>
+                
+                <div class="manage-meta">
+                    <div><i class="fas fa-tag"></i> Web Dev, Node.js</div>
+                    <div><i class="fas fa-money-bill-wave"></i> ৳ 5,000</div>
+                    <div><i class="fas fa-eye"></i> 142 Views</div>
+                    <div><i class="fas fa-shopping-cart"></i> 3 Orders in Queue</div>
+                </div>
+
+                <div class="manage-actions">
+                    <button class="btn btn-outline"><i class="fas fa-edit"></i> Edit</button>
+                    <button class="btn btn-outline"><i class="fas fa-pause"></i> Pause</button>
+                    <button class="btn-small btn-delete" style="margin-left: auto;"><i class="fas fa-trash"></i> Delete</button>
+                </div>
+            </div>
+
+            <!-- Service Card 2 -->
+            <div class="manage-card" style="border-left-color: var(--text-muted); opacity: 0.8;">
+                <div class="manage-card-header">
+                    <h3 class="manage-card-title">I will design 5 custom UI/UX screens in Figma</h3>
+                    <span class="status-badge" style="background: var(--border-color); color: var(--text-muted);">Paused</span>
+                </div>
+                <p class="post-desc">Clean, modern UI/UX design following the latest trends. Perfect for mobile apps or web dashboards.</p>
+                
+                <div class="manage-meta">
+                    <div><i class="fas fa-tag" style="color: var(--text-muted);"></i> Figma, UI/UX</div>
+                    <div><i class="fas fa-money-bill-wave" style="color: var(--text-muted);"></i> ৳ 2,000</div>
+                    <div><i class="fas fa-eye" style="color: var(--text-muted);"></i> 89 Views</div>
+                </div>
+
+                <div class="manage-actions">
+                    <button class="btn btn-outline"><i class="fas fa-edit"></i> Edit</button>
+                    <button class="btn btn-primary"><i class="fas fa-play"></i> Activate</button>
+                    <button class="btn-small btn-delete" style="margin-left: auto;"><i class="fas fa-trash"></i> Delete</button>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+</body>
+</html>
