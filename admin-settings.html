@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin | Settings</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="feed.html" class="logo-text">Annex<span>Link</span> <span style="font-size: 0.9rem; color: #E63946;">ADMIN</span></a>
+        </div>
+        <div class="nav-right">
+            <img src="https://ui-avatars.com/api/?name=Admin&background=E63946&color=fff" alt="Admin" class="avatar">
+        </div>
+    </nav>
+
+    <div class="container admin-container">
+        <!-- Admin Sidebar -->
+        <aside class="sidebar left-sidebar">
+            <ul class="nav-links">
+                <li><a href="feed.html"><i class="fas fa-home"></i> Go to AnnexFeed</a></li>
+                <li><a href="admin.html"><i class="fas fa-shield-alt"></i> Dashboard</a></li>
+                <li><a href="admin-users.html"><i class="fas fa-users"></i> Users</a></li>
+                <li><a href="admin-reports.html"><i class="fas fa-flag"></i> Reports</a></li>
+                <li class="active"><a href="admin-settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+                <li><a href="index.html" style="color: #E63946;"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="admin-content">
+            <div class="admin-header">
+                <h2>Platform Settings</h2>
+                <button class="btn btn-primary" onclick="alert('Settings Saved!')"><i class="fas fa-save"></i> Save Changes</button>
+            </div>
+
+            <div class="admin-section">
+                <!-- General Settings -->
+                <div class="settings-group">
+                    <h3>General Settings</h3>
+                    <form class="settings-form" onsubmit="event.preventDefault();">
+                        <div>
+                            <label>Platform Name</label>
+                            <input type="text" value="AnnexLink">
+                        </div>
+                        <div>
+                            <label>Admin Support Email</label>
+                            <input type="email" value="support@student.bup.edu.bd">
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Category Management -->
+                <div class="settings-group">
+                    <h3>Category Management</h3>
+                    <p class="text-sm" style="margin-bottom: 1rem;">Manage the skills/categories students can select.</p>
+                    <div class="tags" style="margin-bottom: 1rem;">
+                        <span class="tag">Web Design <i class="fas fa-times" style="margin-left: 5px; cursor: pointer;"></i></span>
+                        <span class="tag">Tutoring <i class="fas fa-times" style="margin-left: 5px; cursor: pointer;"></i></span>
+                        <span class="tag">UI/UX <i class="fas fa-times" style="margin-left: 5px; cursor: pointer;"></i></span>
+                    </div>
+                    <div style="display: flex; gap: 1rem; max-width: 400px;">
+                        <input type="text" placeholder="Add new category" style="padding: 0.6rem; flex: 1; border: 1px solid var(--border-color); border-radius: 6px;">
+                        <button class="btn btn-primary">Add</button>
+                    </div>
+                </div>
+
+                <!-- Platform Controls -->
+                <div class="settings-group">
+                    <h3>Platform Controls</h3>
+                    <div class="toggle-row">
+                        <div>
+                            <strong style="color: var(--primary-navy);">Maintenance Mode</strong>
+                            <p class="text-sm">Disable access for non-admins.</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="toggle-row">
+                        <div>
+                            <strong style="color: var(--primary-navy);">Require Email Verification</strong>
+                            <p class="text-sm">Users must verify their @student.bup.edu.bd email.</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+</body>
+</html>

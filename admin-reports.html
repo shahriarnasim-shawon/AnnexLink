@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin | Reports</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="feed.html" class="logo-text">Annex<span>Link</span> <span style="font-size: 0.9rem; color: #E63946;">ADMIN</span></a>
+        </div>
+        <div class="nav-right">
+            <img src="https://ui-avatars.com/api/?name=Admin&background=E63946&color=fff" alt="Admin" class="avatar">
+        </div>
+    </nav>
+
+    <div class="container admin-container">
+        <!-- Admin Sidebar -->
+        <aside class="sidebar left-sidebar">
+            <ul class="nav-links">
+                <li><a href="feed.html"><i class="fas fa-home"></i> Go to AnnexFeed</a></li>
+                <li><a href="admin.html"><i class="fas fa-shield-alt"></i> Dashboard</a></li>
+                <li><a href="admin-users.html"><i class="fas fa-users"></i> Users</a></li>
+                <li class="active"><a href="admin-reports.html"><i class="fas fa-flag"></i> Reports</a></li>
+                <li><a href="admin-settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+                <li><a href="index.html" style="color: #E63946;"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="admin-content">
+            <div class="admin-header">
+                <h2>Pending Reports</h2>
+            </div>
+
+            <div class="admin-section">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Reported Item</th>
+                            <th>Reason</th>
+                            <th>Reported By</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <strong>Post: "I will do your assignments for money"</strong>
+                                <p class="text-sm">Type: Service Post</p>
+                            </td>
+                            <td><span class="status-badge status-reported">Academic Dishonesty</span></td>
+                            <td>jane@student.bup.edu.bd</td>
+                            <td>
+                                <div class="admin-actions">
+                                    <button class="btn-small btn-view" title="Review Post">Review</button>
+                                    <button class="btn-small btn-delete" onclick="deleteRow(this)" title="Delete Post & Warn User"><i class="fas fa-trash"></i></button>
+                                    <button class="btn-small" style="background: var(--text-muted);" onclick="deleteRow(this)" title="Dismiss Report">Dismiss</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>User Profile: "SpamBot123"</strong>
+                                <p class="text-sm">Type: User Profile</p>
+                            </td>
+                            <td><span class="status-badge status-reported">Fake Account / Spam</span></td>
+                            <td>rakib@student.bup.edu.bd</td>
+                            <td>
+                                <div class="admin-actions">
+                                    <button class="btn-small btn-view" title="Review Profile">Review</button>
+                                    <button class="btn-small btn-ban" onclick="toggleBan(this)" title="Ban User"><i class="fas fa-ban"></i></button>
+                                    <button class="btn-small" style="background: var(--text-muted);" onclick="deleteRow(this)" title="Dismiss Report">Dismiss</button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>
