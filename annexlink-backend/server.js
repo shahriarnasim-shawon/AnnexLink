@@ -3,6 +3,9 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const connectDB = require('./config/db');
 
+// Import Routes
+const authRoutes = require('./routes/authRoutes');
+
 // Load env variables
 dotenv.config();
 
@@ -15,6 +18,9 @@ const app = express();
 // Middleware
 app.use(express.json()); // Allows us to accept JSON data in the body
 app.use(cors());         // Allows our frontend to communicate with this backend
+
+// ----- API Routes -----
+app.use('/api/auth', authRoutes);
 
 // Basic Route to test server
 app.get('/', (req, res) => {
