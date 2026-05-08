@@ -9,7 +9,9 @@ const { Server } = require('socket.io'); // Required for Socket.io
 const authRoutes = require('./routes/authRoutes');
 const postRoutes = require('./routes/postRoutes');
 const userRoutes = require('./routes/userRoutes');
-const messageRoutes = require('./routes/messageRoutes'); // New Messages Route
+const messageRoutes = require('./routes/messageRoutes');
+const adminRoutes = require('./routes/adminRoutes');
+const notificationRoutes = require('./routes/notificationRoutes'); // New Messages Route
 
 // Load env variables
 dotenv.config();
@@ -28,14 +30,16 @@ app.use(cors());
 app.use('/api/auth', authRoutes);
 app.use('/api/posts', postRoutes);
 app.use('/api/users', userRoutes);
-app.use('/api/messages', messageRoutes); // Added Messages API
+app.use('/api/messages', messageRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api/notifications', notificationRoutes);
 
 app.get('/', (req, res) => {
     res.send('AnnexLink API is running...');
 });
 
 // Port configuration
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 8000;
 
 // ----- SOCKET.IO INTEGRATION -----
 
