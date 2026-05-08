@@ -1,79 +1,138 @@
-// Mock Data simulating backend response based on user's interests/skills
-const feedData =[
-    {
-        id: 1,
-        user: "Sadman Sakib",
-        rating: "4.9",
-        avatar: "https://scontent.fdac41-2.fna.fbcdn.net/v/t39.30808-6/588836861_2459723257778800_1979078234014540611_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=1d70fc&_nc_ohc=iun-7gMk0XgQ7kNvwEFnAfK&_nc_oc=AdlNMJkYIyNLrikOTZZFjvf6nXeEd2hD-JHLoAUA-4Mrz_rLeAUgdiUJX7AX3AmyrvU&_nc_zt=23&_nc_ht=scontent.fdac41-2.fna&_nc_gid=0ho0AKc4iVPEnJi-_3mWyQ&_nc_ss=8&oh=00_Afxy18Oyh2DATHDWPX1rPJfGxDqPK1yEwXYuZ428E3RJrw&oe=69BF7169&background=20B2AA&color=fff",
-        type: "Service", // Can be Service, Hiring, or Request
-        title: "I will build a responsive Full-Stack website",
-        description: "Experienced with MERN stack. I can build fast, responsive, and scalable web applications for your final year projects or startups.",
-        tags:["Web Dev", "React", "Node.js", "MongoDB"],
-        price: "৳ 5,000",
-        timePosted: "2 hours ago"
-    },
-    {
-        id: 2,
-        user: "Farzana Hossain Mimi",
-        rating: "4.7",
-        avatar: "https://scontent.fdac41-2.fna.fbcdn.net/v/t39.30808-6/617084031_1863213697693752_4226638340578951317_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=1d70fc&_nc_ohc=Ar-gpSvzdnAQ7kNvwFSR0BA&_nc_oc=AdldbA37uXaSMOTVqIw0BHXfFztf9pkj6lEq17DTrEkKaBLn78D_FEg6m4rUGmALkbc&_nc_zt=23&_nc_ht=scontent.fdac41-2.fna&_nc_gid=RGoo90I-ks24fTqfDJmZxg&_nc_ss=8&oh=00_AfyDevqcxFupfG7sMa0bbrm8RiP_Cky-qS36MSXECCvH_Q&oe=69BF6988&background=FF8C00&color=fff",
-        type: "Hiring",
-        title: "Looking for a UI/UX Designer for a Mobile App",
-        description: "We are participating in a hackathon and need someone proficient in Figma to design 10-12 screens. Budget is negotiable based on your portfolio.",
-        tags:["Figma", "UI/UX", "Mobile Design"],
-        price: "৳ 3,000",
-        timePosted: "5 hours ago"
-    },
-    {
-        id: 3,
-        user: "Md Shahriar Nasim Shawon",
-        rating: "New",
-        avatar: "https://scontent.fdac41-1.fna.fbcdn.net/v/t39.30808-6/611655689_4328506937474467_7784609377809409809_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=1d70fc&_nc_ohc=lVshwKo16m0Q7kNvwEkZECk&_nc_oc=AdmAgOsAZcX_MhaemRnuSoyaX36tz5PZfDgKbCLMS6InrUxq6Gfh7mS1y9JqsTroFLY&_nc_zt=23&_nc_ht=scontent.fdac41-1.fna&_nc_gid=JDC5Kx0iMhYqpIahwNylrA&_nc_ss=8&oh=00_AfwyJG0ByK_jelUI6akcBb75YJngWhGU3pizPNiPm-lYFg&oe=69BF6A6A&background=0A192F&color=fff",
-        type: "Request",
-        title: "Need a tutor for Data Structures & Algorithms",
-        description: "Having trouble understanding graph algorithms (Dijkstra, BFS/DFS). Looking for a senior who can sit with me for a few hours before midterms.",
-        tags:["Tutoring", "DSA", "Java", "Algorithms"],
-        price: "৳ 500/hr",
-        timePosted: "1 day ago"
-    }
-];
+// --- 1. Authentication Check ---
+const token = localStorage.getItem('annexlink_token');
+const userStr = localStorage.getItem('annexlink_user');
 
-// Function to map Post Type to correct CSS classes and button texts
-function getPostTypeConfig(type) {
-    switch(type) {
-        case 'Service':
-            return { badgeClass: 'badge-service', primaryBtn: 'Hire Now' };
-        case 'Hiring':
-            return { badgeClass: 'badge-hiring', primaryBtn: 'Apply' };
-        case 'Request':
-            return { badgeClass: 'badge-request', primaryBtn: 'Offer Help' };
-        default:
-            return { badgeClass: 'badge-service', primaryBtn: 'View' };
+// If no token exists, redirect back to login page
+if (!token || !userStr) {
+    window.location.href = "index.html";
+}
+
+const currentUser = JSON.parse(userStr);
+
+// Set current user's avatar in the UI
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('current-user-avatar').src = currentUser.avatar || `https://ui-avatars.com/api/?name=${currentUser.name}&background=0A192F&color=fff`;
+    fetchFeed(); // Load feed when page loads
+});
+
+// --- 2. Post Creation Logic ---
+document.getElementById('create-post-form').addEventListener('submit', async (e) => {
+    e.preventDefault(); // Prevent page reload
+
+    // Gather data from the form
+    const title = document.getElementById('post-title').value;
+    const type = document.getElementById('post-type').value;
+    const description = document.getElementById('post-desc').value;
+    const tagsString = document.getElementById('post-tags').value;
+    const price = document.getElementById('post-price').value;
+
+    const tagsArray = tagsString.split(',').map(tag => tag.trim()).filter(tag => tag !== "");
+
+    try {
+        const response = await fetch('http://localhost:8000/api/posts', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` // Provide our digital ID card
+            },
+            body: JSON.stringify({
+                title,
+                description,
+                type,
+                tags: tagsArray,
+                price
+            })
+        });
+
+        if (response.ok) {
+            // Clear form
+            document.getElementById('create-post-form').reset();
+            // Refresh feed to show new post
+            fetchFeed();
+        } else {
+            const data = await response.json();
+            alert('Failed to create post: ' + data.message);
+        }
+    } catch (error) {
+        console.error('Error creating post:', error);
+    }
+});
+
+// --- 3. Fetch & Render Feed Logic ---
+async function fetchFeed() {
+    try {
+        const response = await fetch('http://localhost:8000/api/posts', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (response.ok) {
+            const posts = await response.json();
+            renderFeed(posts);
+        } else if (response.status === 401) {
+            // Token expired or invalid
+            logout();
+        }
+    } catch (error) {
+        console.error('Error fetching feed:', error);
     }
 }
 
-// Function to Render Posts to the DOM
-function renderFeed() {
+function getPostTypeConfig(type) {
+    switch(type) {
+        case 'Service': return { badgeClass: 'badge-service', primaryBtn: 'Hire Now' };
+        case 'Hiring': return { badgeClass: 'badge-hiring', primaryBtn: 'Apply' };
+        case 'Request': return { badgeClass: 'badge-request', primaryBtn: 'Offer Help' };
+        default: return { badgeClass: 'badge-service', primaryBtn: 'View' };
+    }
+}
+
+// Function to calculate "time ago"
+function timeSince(dateString) {
+    const date = new Date(dateString);
+    const seconds = Math.floor((new Date() - date) / 1000);
+    let interval = seconds / 31536000;
+    if (interval > 1) return Math.floor(interval) + " years ago";
+    interval = seconds / 2592000;
+    if (interval > 1) return Math.floor(interval) + " months ago";
+    interval = seconds / 86400;
+    if (interval > 1) return Math.floor(interval) + " days ago";
+    interval = seconds / 3600;
+    if (interval > 1) return Math.floor(interval) + " hours ago";
+    interval = seconds / 60;
+    if (interval > 1) return Math.floor(interval) + " minutes ago";
+    return Math.floor(seconds) + " seconds ago";
+}
+
+function renderFeed(posts) {
     const feedContainer = document.getElementById('annex-feed');
     feedContainer.innerHTML = ''; // Clear existing content
 
-    feedData.forEach(post => {
+    if (posts.length === 0) {
+        feedContainer.innerHTML = '<p style="text-align:center; color: var(--text-muted); margin-top: 2rem;">No posts available right now. Be the first to post!</p>';
+        return;
+    }
+
+    posts.forEach(post => {
         const config = getPostTypeConfig(post.type);
-
-        // Generate Tags HTML
         const tagsHTML = post.tags.map(tag => `<span class="tag">${tag}</span>`).join('');
+        
+        // Safety check if user was deleted but post remains
+        const creatorName = post.createdBy ? post.createdBy.name : 'Unknown User';
+        const creatorAvatar = post.createdBy ? post.createdBy.avatar : 'https://ui-avatars.com/api/?name=Unknown&background=777&color=fff';
+        const creatorRating = post.createdBy ? post.createdBy.rating.toFixed(1) : 'New';
 
-        // Generate Post HTML
         const postElement = document.createElement('div');
         postElement.classList.add('post-card');
         
         postElement.innerHTML = `
             <div class="post-header">
                 <div class="user-info">
-                    <img src="${post.avatar}" alt="${post.user}" class="avatar">
+                    <img src="${creatorAvatar.startsWith('http') ? creatorAvatar : `https://ui-avatars.com/api/?name=${creatorName}&background=0A192F&color=fff`}" alt="${creatorName}" class="avatar">
                     <div>
-                        <h4>${post.user} <span class="text-sm">⭐ ${post.rating}</span></h4>
-                        <p class="text-sm">${post.timePosted}</p>
+                        <h4>${creatorName} <span class="text-sm">⭐ ${creatorRating}</span></h4>
+                        <p class="text-sm">${timeSince(post.createdAt)}</p>
                     </div>
                 </div>
                 <span class="post-badge ${config.badgeClass}">${post.type}</span>
@@ -87,7 +146,7 @@ function renderFeed() {
             </div>
             
             <div class="post-footer">
-                <div class="post-price">${post.price}</div>
+                <div class="post-price">${post.price || 'Negotiable'}</div>
                 <div class="post-actions">
                     <button class="btn btn-outline"><i class="far fa-bookmark"></i> Save</button>
                     <button class="btn btn-secondary"><i class="far fa-comment-dots"></i> Message</button>
@@ -100,7 +159,15 @@ function renderFeed() {
     });
 }
 
-// Initialize feed rendering when page loads
-document.addEventListener('DOMContentLoaded', () => {
-    renderFeed();
+// --- 4. Logout Logic ---
+function logout() {
+    localStorage.removeItem('annexlink_token');
+    localStorage.removeItem('annexlink_user');
+    window.location.href = "index.html";
+}
+
+// Attach logout function to the logout link in the sidebar
+document.querySelector('a[href="index.html"]').addEventListener('click', (e) => {
+    e.preventDefault();
+    logout();
 });

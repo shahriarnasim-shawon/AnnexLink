@@ -51,12 +51,23 @@
         <!-- Main Feed Area -->
         <main class="feed-content">
             <!-- Create Post Box -->
-            <div class="create-post">
-                <img src="https://scontent.fdac1-1.fna.fbcdn.net/v/t39.30808-6/516934099_4146456082346221_103794666320343105_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=53a332&_nc_eui2=AeH8zoOp4RbkY_r1kljCPeJoXqJObffAZw1eok5t98BnDZjEHMPY3DYKqZkvlXZssntr_B5E0ESJ0WJN5n1zwXwU&_nc_ohc=8U_Gxz15DnsQ7kNvwF9qQiS&_nc_oc=AdpdYDztk-ctnvr0nF_jf2R2W2umo2CaAHniFRCWq39PganvnATqxtRMo7EtKOu-oU0&_nc_zt=23&_nc_ht=scontent.fdac1-1.fna&_nc_gid=Km9RWMNbVoG35CpQ2MHtog&_nc_ss=7a3a8&oh=00_AfztY7GENBR2QFKM2H3i80rICT69Litkr_-Q1kYLOwEh8w&oe=69D062FF" alt="User" class="avatar">
-                <input type="text" placeholder="Offer a service, hire someone, or make a request...">
-                <button class="btn btn-primary"><i class="fas fa-pen"></i> Post</button>
-            </div>
-
+            <form id="create-post-form" class="create-post" style="flex-direction: column; align-items: stretch; gap: 1rem;">
+                <div style="display: flex; gap: 1rem; align-items: center; width: 100%;">
+                    <img id="current-user-avatar" src="https://ui-avatars.com/api/?name=User&background=0A192F&color=fff" alt="User" class="avatar">
+                    <input type="text" id="post-title" placeholder="Post Title (e.g., I will build a responsive website)" required style="flex:1;">
+                    <select id="post-type" style="padding: 0.8rem; border-radius: 20px; border: 1px solid var(--border-color); outline: none; background: var(--bg-color);">
+                        <option value="Service">Offer Service</option>
+                        <option value="Hiring">Hiring</option>
+                        <option value="Request">Request</option>
+                    </select>
+                </div>
+                <textarea id="post-desc" placeholder="Describe what you are offering or looking for..." required style="width: 100%; padding: 0.8rem; border-radius: 12px; border: 1px solid var(--border-color); outline: none; background: var(--bg-color); resize: none; font-family: inherit;" rows="2"></textarea>
+                <div style="display: flex; gap: 1rem;">
+                    <input type="text" id="post-tags" placeholder="Tags (comma separated, e.g., Figma, Java)" style="flex: 2; padding: 0.8rem; border-radius: 20px; border: 1px solid var(--border-color); background: var(--bg-color);">
+                    <input type="text" id="post-price" placeholder="Price (e.g., ৳ 1000 or Negotiable)" style="flex: 1; padding: 0.8rem; border-radius: 20px; border: 1px solid var(--border-color); background: var(--bg-color);">
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Post</button>
+                </div>
+            </form>
             <!-- Posts will be injected here via JavaScript -->
             <div id="annex-feed"></div>
         </main>
