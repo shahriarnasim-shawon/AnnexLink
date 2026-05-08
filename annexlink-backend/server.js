@@ -3,6 +3,7 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const connectDB = require('./config/db');
 const postRoutes = require('./routes/postRoutes');
+const userRoutes = require('./routes/userRoutes');
 
 // Import Routes
 const authRoutes = require('./routes/authRoutes');
@@ -23,6 +24,7 @@ app.use(cors());         // Allows our frontend to communicate with this backend
 // ----- API Routes -----
 app.use('/api/auth', authRoutes);
 app.use('/api/posts', postRoutes);
+app.use('/api/users', userRoutes);
 // Basic Route to test server
 app.get('/', (req, res) => {
     res.send('AnnexLink API is running...');
