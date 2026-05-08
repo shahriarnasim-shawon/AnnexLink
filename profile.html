@@ -48,31 +48,42 @@
             <div class="profile-header-card">
                 <div class="profile-cover"></div>
                 <div class="profile-info">
-                    <img src="https://scontent.fdac1-1.fna.fbcdn.net/v/t39.30808-6/516934099_4146456082346221_103794666320343105_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=53a332&_nc_eui2=AeH8zoOp4RbkY_r1kljCPeJoXqJObffAZw1eok5t98BnDZjEHMPY3DYKqZkvlXZssntr_B5E0ESJ0WJN5n1zwXwU&_nc_ohc=8U_Gxz15DnsQ7kNvwF9qQiS&_nc_oc=AdpdYDztk-ctnvr0nF_jf2R2W2umo2CaAHniFRCWq39PganvnATqxtRMo7EtKOu-oU0&_nc_zt=23&_nc_ht=scontent.fdac1-1.fna&_nc_gid=Km9RWMNbVoG35CpQ2MHtog&_nc_ss=7a3a8&oh=00_AfztY7GENBR2QFKM2H3i80rICT69Litkr_-Q1kYLOwEh8w&oe=69D062FF" alt="Md Shahriar Nasim Shawon" class="profile-avatar">
-                    <h2 class="profile-name">Md Shahriar Nasim Shawon</h2>
-                    <p class="profile-meta">ICT Department • Batch 2023 • shawon@student.bup.edu.bd</p>
+                    <img id="profile-avatar" src="https://ui-avatars.com/api/?name=User&background=0A192F&color=fff" alt="User" class="profile-avatar">
+                    <h2 id="profile-name" class="profile-name">Loading...</h2>
+                    <p id="profile-meta" class="profile-meta">Loading details...</p>
                     
                     <div class="profile-stats">
-                        <div class="stat-item"><h3>⭐ 4.8</h3><p>Rating</p></div>
-                        <div class="stat-item"><h3>15</h3><p>Reviews</p></div>
-                        <div class="stat-item"><h3>8</h3><p>Services Done</p></div>
+                        <div class="stat-item"><h3 id="profile-rating">⭐ 0.0</h3><p>Rating</p></div>
+                        <div class="stat-item"><h3 id="profile-reviews">0</h3><p>Reviews</p></div>
+                        <div class="stat-item"><h3 id="profile-services">0</h3><p>Active Posts</p></div>
                     </div>
 
-                    <p class="profile-bio">
-                        Hi! I am a passionate Web Developer and Graphic Designer. I love helping fellow students with their final year projects, UI/UX designs, and setting up scalable web applications. Feel free to reach out!
-                    </p>
-
-                    <div class="tags" style="justify-content: center; margin-bottom: 1.5rem;">
-                        <span class="tag">Web Design</span>
-                        <span class="tag">JavaScript</span>
-                        <span class="tag">React.js</span>
-                        <span class="tag">Figma</span>
+                    <!-- Display Mode -->
+                    <div id="display-mode">
+                        <p id="profile-bio" class="profile-bio">Loading bio...</p>
+                        <div id="profile-skills" class="tags" style="justify-content: center; margin-bottom: 1.5rem;">
+                            <!-- Skills will be injected here -->
+                        </div>
+                        <div class="post-actions" style="justify-content: center;">
+                            <button class="btn btn-primary" onclick="toggleEditMode()"><i class="fas fa-edit"></i> Edit Profile</button>
+                        </div>
                     </div>
 
-                    <div class="post-actions">
-                        <button class="btn btn-outline"><i class="fas fa-share-alt"></i> Share Profile</button>
-                        <button class="btn btn-primary"><i class="fas fa-edit"></i> Edit Profile</button>
-                    </div>
+                    <!-- Edit Mode (Hidden by default) -->
+                    <form id="edit-profile-form" class="hidden" style="width: 100%; max-width: 500px; text-align: left; background: var(--bg-color); padding: 1.5rem; border-radius: 12px; margin-top: 1rem; border: 1px solid var(--border-color);">
+                        <h3 style="margin-bottom: 1rem; color: var(--primary-navy);">Edit Profile</h3>
+                        
+                        <label style="font-weight: bold; font-size: 0.9rem; margin-bottom: 0.3rem; display: block;">Bio:</label>
+                        <textarea id="edit-bio" rows="3" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 1rem; font-family: inherit; resize: none;"></textarea>
+                        
+                        <label style="font-weight: bold; font-size: 0.9rem; margin-bottom: 0.3rem; display: block;">Skills (comma separated):</label>
+                        <input type="text" id="edit-skills" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 1rem;">
+                        
+                        <div style="display: flex; gap: 1rem;">
+                            <button type="submit" class="btn btn-primary" style="flex: 1;">Save Changes</button>
+                            <button type="button" class="btn btn-outline" style="flex: 1;" onclick="toggleEditMode()">Cancel</button>
+                        </div>
+                    </form>
                 </div>
             </div>
 
@@ -103,6 +114,8 @@
 
         </main>
     </div>
+
+    <script src="profile.js"></script>
 
 </body>
 </html>
