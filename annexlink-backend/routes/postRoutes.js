@@ -2,10 +2,11 @@ const express = require('express');
 const router = express.Router();
 const { createPost, getFeedPosts } = require('../controllers/postController');
 const { protect } = require('../middleware/authMiddleware');
+const upload = require('../middleware/uploadMiddleware'); // Import multer
 
-// Both creating a post and getting the feed require the user to be logged in (protected)
+// Add upload.single('media') to intercept the image file
 router.route('/')
-    .post(protect, createPost)
+    .post(protect, upload.single('media'), createPost)
     .get(protect, getFeedPosts);
 
 module.exports = router;

@@ -1,17 +1,18 @@
 const express = require('express');
 const dotenv = require('dotenv');
-const cors = require('cors');
+const cors = require('cors'); // Required to connect frontend and backend
 const connectDB = require('./config/db');
-const http = require('http'); // Required for Socket.io
-const { Server } = require('socket.io'); // Required for Socket.io
+const http = require('http'); 
+const { Server } = require('socket.io'); 
+const path = require('path');
 
 // Import Routes
 const authRoutes = require('./routes/authRoutes');
 const postRoutes = require('./routes/postRoutes');
 const userRoutes = require('./routes/userRoutes');
-const messageRoutes = require('./routes/messageRoutes');
-const adminRoutes = require('./routes/adminRoutes');
-const notificationRoutes = require('./routes/notificationRoutes'); // New Messages Route
+const messageRoutes = require('./routes/messageRoutes'); 
+const adminRoutes = require('./routes/adminRoutes'); // From Step 8
+const notificationRoutes = require('./routes/notificationRoutes'); // From Step 8
 
 // Load env variables
 dotenv.config();
@@ -22,11 +23,14 @@ connectDB();
 // Initialize Express
 const app = express();
 
-// Middleware
+// --- MIDDLEWARE ---
 app.use(express.json()); 
-app.use(cors());         
+app.use(cors()); // <-- THIS WAS MISSING! It allows the frontend to fetch data.
 
-// ----- API Routes -----
+// Make the uploads folder publicly accessible
+app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));        
+
+// --- API Routes ---
 app.use('/api/auth', authRoutes);
 app.use('/api/posts', postRoutes);
 app.use('/api/users', userRoutes);
@@ -34,6 +38,7 @@ app.use('/api/messages', messageRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/notifications', notificationRoutes);
 
+// Base route test
 app.get('/', (req, res) => {
     res.send('AnnexLink API is running...');
 });
@@ -41,7 +46,7 @@ app.get('/', (req, res) => {
 // Port configuration
 const PORT = process.env.PORT || 8000;
 
-// ----- SOCKET.IO INTEGRATION -----
+// --- SOCKET.IO INTEGRATION ---
 
 // 1. Create an HTTP server from the Express app
 const server = http.createServer(app);
@@ -49,7 +54,7 @@ const server = http.createServer(app);
 // 2. Initialize Socket.io on that server
 const io = new Server(server, {
     cors: {
-        origin: "*", // Allows frontend to connect
+        origin: "*", 
         methods: ["GET", "POST"]
     }
 });
@@ -68,10 +73,7 @@ io.on("connection", (socket) => {
     // When a user sends a message
     socket.on("new message", (newMessage) => {
         const receiverId = newMessage.receiver;
-        
         if (!receiverId) return console.log("Message has no receiver ID");
-
-        // Send the message INSTANTLY to the receiver's personal room
         socket.in(receiverId).emit("message received", newMessage);
     });
 
@@ -80,7 +82,7 @@ io.on("connection", (socket) => {
     });
 });
 
-// IMPORTANT: We now start 'server.listen' instead of 'app.listen'
+// Start the server
 server.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });

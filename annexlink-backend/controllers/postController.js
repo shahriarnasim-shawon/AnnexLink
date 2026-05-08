@@ -7,13 +7,25 @@ const createPost = async (req, res) => {
     try {
         const { title, description, type, tags, price } = req.body;
 
-        // Create the post. Notice we use `req.user._id` which comes from our authMiddleware!
+        // Tags might come as a string from FormData, convert back to array
+        let parsedTags = tags;
+        if (typeof tags === 'string') {
+            parsedTags = tags.split(',').map(tag => tag.trim()).filter(tag => tag !== "");
+        }
+
+        // Check if an image/file was uploaded
+        let mediaPath = "";
+        if (req.file) {
+            mediaPath = `/uploads/${req.file.filename}`;
+        }
+
         const post = await Post.create({
             title,
             description,
             type,
-            tags,
+            tags: parsedTags,
             price,
+            media: mediaPath, // Save the image path!
             createdBy: req.user._id 
         });
 
