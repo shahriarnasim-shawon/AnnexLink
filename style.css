@@ -295,3 +295,10 @@ li { list-style: none; }
 input:checked + .slider { background-color: var(--accent-teal); }
 input:checked + .slider:before { transform: translateX(22px); }
 .toggle-row { display: flex; align-items: center; justify-content: space-between; max-width: 400px; padding: 1rem 0; }
+
+/* Media Upload Styles */
+.file-upload-btn { background: var(--bg-color); color: var(--text-muted); border: 1px solid var(--border-color); padding: 0.8rem; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; transition: 0.3s; }
+.file-upload-btn:hover { border-color: var(--accent-teal); color: var(--accent-teal); }
+.file-upload-btn input[type="file"] { display: none; }
+.post-media-img { width: 100%; max-height: 400px; object-fit: cover; border-radius: var(--radius); margin-bottom: 1rem; border: 1px solid var(--border-color); }
+#file-name-display { font-size: 0.85rem; color: var(--accent-teal); overflow: hidden; white-space: nowrap; text-overflow: ellipsis; max-width: 150px; }

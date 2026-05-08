@@ -1,53 +1,63 @@
-// --- 1. Authentication Check ---
+// --- 1. Authentication Check & Setup ---
 const token = localStorage.getItem('annexlink_token');
 const userStr = localStorage.getItem('annexlink_user');
 
-// If no token exists, redirect back to login page
+// If no token exists, instantly redirect back to login page
 if (!token || !userStr) {
     window.location.href = "index.html";
 }
 
 const currentUser = JSON.parse(userStr);
 
+// Set current user's avatar in the UI when page loads
 // Set current user's avatar in the UI
 document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('current-user-avatar').src = currentUser.avatar || `https://ui-avatars.com/api/?name=${currentUser.name}&background=0A192F&color=fff`;
+    const avatarUrl = currentUser.avatar || `https://ui-avatars.com/api/?name=${currentUser.name}&background=0A192F&color=fff`;
+    
+    // Set the "Create Post" box avatar
+    document.getElementById('current-user-avatar').src = avatarUrl;
+    
+    // Set the Top Navbar avatar (Selects the last image in the nav-right div)
+    const navAvatar = document.querySelector('.nav-right .avatar');
+    if(navAvatar) navAvatar.src = avatarUrl;
+
     fetchFeed(); // Load feed when page loads
 });
 
-// --- 2. Post Creation Logic ---
+// --- 2. Post Creation Logic (Now with Image Support) ---
 document.getElementById('create-post-form').addEventListener('submit', async (e) => {
-    e.preventDefault(); // Prevent page reload
+    e.preventDefault(); // Prevent default page reload
 
-    // Gather data from the form
-    const title = document.getElementById('post-title').value;
-    const type = document.getElementById('post-type').value;
-    const description = document.getElementById('post-desc').value;
-    const tagsString = document.getElementById('post-tags').value;
-    const price = document.getElementById('post-price').value;
+    // Create a FormData object to handle text AND files
+    const formData = new FormData();
+    formData.append('title', document.getElementById('post-title').value);
+    formData.append('type', document.getElementById('post-type').value);
+    formData.append('description', document.getElementById('post-desc').value);
+    formData.append('tags', document.getElementById('post-tags').value);
+    formData.append('price', document.getElementById('post-price').value);
 
-    const tagsArray = tagsString.split(',').map(tag => tag.trim()).filter(tag => tag !== "");
+    // Grab the file if one was selected by the user
+    const fileInput = document.getElementById('post-media');
+    if (fileInput.files[0]) {
+        formData.append('media', fileInput.files[0]);
+    }
 
     try {
         const response = await fetch('http://localhost:8000/api/posts', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}` // Provide our digital ID card
+                // Notice: We DO NOT set 'Content-Type' when using FormData. The browser handles it!
+                'Authorization': `Bearer ${token}` 
             },
-            body: JSON.stringify({
-                title,
-                description,
-                type,
-                tags: tagsArray,
-                price
-            })
+            body: formData
         });
 
         if (response.ok) {
-            // Clear form
+            // Success! Clear form
             document.getElementById('create-post-form').reset();
-            // Refresh feed to show new post
+            document.getElementById('file-name-display').innerText = ""; // Clear attached file text
+            
+            // Refresh feed to show the brand new post at the top
             fetchFeed();
         } else {
             const data = await response.json();
@@ -71,7 +81,7 @@ async function fetchFeed() {
             const posts = await response.json();
             renderFeed(posts);
         } else if (response.status === 401) {
-            // Token expired or invalid
+            // Token expired or invalid, log them out
             logout();
         }
     } catch (error) {
@@ -79,6 +89,7 @@ async function fetchFeed() {
     }
 }
 
+// Helper: Determine button text and colors based on Post Type
 function getPostTypeConfig(type) {
     switch(type) {
         case 'Service': return { badgeClass: 'badge-service', primaryBtn: 'Hire Now' };
@@ -88,7 +99,7 @@ function getPostTypeConfig(type) {
     }
 }
 
-// Function to calculate "time ago"
+// Helper: Convert timestamp to "X minutes ago"
 function timeSince(dateString) {
     const date = new Date(dateString);
     const seconds = Math.floor((new Date() - date) / 1000);
@@ -105,9 +116,10 @@ function timeSince(dateString) {
     return Math.floor(seconds) + " seconds ago";
 }
 
+// Function to generate HTML for the feed
 function renderFeed(posts) {
     const feedContainer = document.getElementById('annex-feed');
-    feedContainer.innerHTML = ''; // Clear existing content
+    feedContainer.innerHTML = ''; 
 
     if (posts.length === 0) {
         feedContainer.innerHTML = '<p style="text-align:center; color: var(--text-muted); margin-top: 2rem;">No posts available right now. Be the first to post!</p>';
@@ -116,20 +128,53 @@ function renderFeed(posts) {
 
     posts.forEach(post => {
         const config = getPostTypeConfig(post.type);
+        
+        // Generate tag spans
         const tagsHTML = post.tags.map(tag => `<span class="tag">${tag}</span>`).join('');
         
-        // Safety check if user was deleted but post remains
+        // Fallbacks in case user was deleted but their post remained
         const creatorName = post.createdBy ? post.createdBy.name : 'Unknown User';
         const creatorAvatar = post.createdBy ? post.createdBy.avatar : 'https://ui-avatars.com/api/?name=Unknown&background=777&color=fff';
-        const creatorRating = post.createdBy ? post.createdBy.rating.toFixed(1) : 'New';
+        const creatorRating = post.createdBy && post.createdBy.rating > 0 ? post.createdBy.rating.toFixed(1) : 'New';
 
+        // Display media if the post has an image/video attached
+       // Clean the URL so there are no double slashes
+// Clean the URL: Replace any Windows backslashes with forward slashes
+        // Clean the URL: Replace any Windows backslashes with forward slashes
+        let mediaUrl = '';
+        if (post.media && post.media.trim() !== "") {
+            let cleanPath = post.media.replace(/\\/g, '/'); 
+            
+            mediaUrl = cleanPath.startsWith('/') 
+                ? `http://localhost:8000${cleanPath}` 
+                : `http://localhost:8000/${cleanPath}`;
+        }
+
+        // Determine if it's a video or image based on file extension
+        let mediaHTML = '';
+        if (mediaUrl) {
+            const videoExtensions =['.mp4', '.webm', '.ogg', '.mov'];
+            const isVideo = videoExtensions.some(ext => mediaUrl.toLowerCase().endsWith(ext));
+
+            if (isVideo) {
+                // Return a Video Player
+                mediaHTML = `
+                    <video controls style="width: 100%; max-height: 400px; border-radius: 12px; margin-bottom: 1rem; border: 1px solid var(--border-color); background: #000;">
+                        <source src="${mediaUrl}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>`;
+            } else {
+                // Return an Image
+                mediaHTML = `<img src="${mediaUrl}" alt="Post Media" style="width: 100%; max-height: 400px; object-fit: cover; border-radius: 12px; margin-bottom: 1rem; border: 1px solid var(--border-color);">`;
+            }
+        }
         const postElement = document.createElement('div');
         postElement.classList.add('post-card');
         
         postElement.innerHTML = `
             <div class="post-header">
                 <div class="user-info">
-                    <img src="${creatorAvatar.startsWith('http') ? creatorAvatar : `https://ui-avatars.com/api/?name=${creatorName}&background=0A192F&color=fff`}" alt="${creatorName}" class="avatar">
+                    <img src="${creatorAvatar.startsWith('http') ? creatorAvatar : `https://ui-avatars.com/api/?name=${encodeURIComponent(creatorName)}&background=0A192F&color=fff`}" alt="${creatorName}" class="avatar">
                     <div>
                         <h4>${creatorName} <span class="text-sm">⭐ ${creatorRating}</span></h4>
                         <p class="text-sm">${timeSince(post.createdAt)}</p>
@@ -141,6 +186,8 @@ function renderFeed(posts) {
             <h3 class="post-title">${post.title}</h3>
             <p class="post-desc">${post.description}</p>
             
+            ${mediaHTML} <!-- INJECTS THE IMAGE HERE -->
+            
             <div class="tags">
                 ${tagsHTML}
             </div>
@@ -149,7 +196,8 @@ function renderFeed(posts) {
                 <div class="post-price">${post.price || 'Negotiable'}</div>
                 <div class="post-actions">
                     <button class="btn btn-outline"><i class="far fa-bookmark"></i> Save</button>
-                    <button class="btn btn-secondary"><i class="far fa-comment-dots"></i> Message</button>
+                    <!-- Small tweak: Added window.location to jump to chat -->
+                    <button class="btn btn-secondary" onclick="window.location.href='chat.html'"><i class="far fa-comment-dots"></i> Message</button>
                     <button class="btn btn-primary">${config.primaryBtn}</button>
                 </div>
             </div>
@@ -161,13 +209,19 @@ function renderFeed(posts) {
 
 // --- 4. Logout Logic ---
 function logout() {
+    // Clear localStorage
     localStorage.removeItem('annexlink_token');
     localStorage.removeItem('annexlink_user');
+    
+    // Redirect to login
     window.location.href = "index.html";
 }
 
 // Attach logout function to the logout link in the sidebar
-document.querySelector('a[href="index.html"]').addEventListener('click', (e) => {
-    e.preventDefault();
-    logout();
-});
+const logoutBtn = document.querySelector('a[href="index.html"]');
+if (logoutBtn) {
+    logoutBtn.addEventListener('click', (e) => {
+        e.preventDefault(); // Stop normal link behavior
+        logout();
+    });
+}

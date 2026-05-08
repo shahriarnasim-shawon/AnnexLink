@@ -53,18 +53,26 @@
             <!-- Create Post Box -->
             <form id="create-post-form" class="create-post" style="flex-direction: column; align-items: stretch; gap: 1rem;">
                 <div style="display: flex; gap: 1rem; align-items: center; width: 100%;">
-                    <img id="current-user-avatar" src="https://ui-avatars.com/api/?name=User&background=0A192F&color=fff" alt="User" class="avatar">
-                    <input type="text" id="post-title" placeholder="Post Title (e.g., I will build a responsive website)" required style="flex:1;">
+                    <img id="current-user-avatar" src="https://ui-avatars.com/api/?name=User&background=0A192F&color=fff" class="avatar">
+                    <input type="text" id="post-title" placeholder="Post Title (e.g., Selling my BBA Books)" required style="flex:1;">
                     <select id="post-type" style="padding: 0.8rem; border-radius: 20px; border: 1px solid var(--border-color); outline: none; background: var(--bg-color);">
                         <option value="Service">Offer Service</option>
                         <option value="Hiring">Hiring</option>
                         <option value="Request">Request</option>
                     </select>
                 </div>
-                <textarea id="post-desc" placeholder="Describe what you are offering or looking for..." required style="width: 100%; padding: 0.8rem; border-radius: 12px; border: 1px solid var(--border-color); outline: none; background: var(--bg-color); resize: none; font-family: inherit;" rows="2"></textarea>
-                <div style="display: flex; gap: 1rem;">
-                    <input type="text" id="post-tags" placeholder="Tags (comma separated, e.g., Figma, Java)" style="flex: 2; padding: 0.8rem; border-radius: 20px; border: 1px solid var(--border-color); background: var(--bg-color);">
-                    <input type="text" id="post-price" placeholder="Price (e.g., ৳ 1000 or Negotiable)" style="flex: 1; padding: 0.8rem; border-radius: 20px; border: 1px solid var(--border-color); background: var(--bg-color);">
+                <textarea id="post-desc" placeholder="Describe what you are offering or selling..." required style="width: 100%; padding: 0.8rem; border-radius: 12px; border: 1px solid var(--border-color); outline: none; background: var(--bg-color); resize: none; font-family: inherit;" rows="2"></textarea>
+                
+                <div style="display: flex; gap: 1rem; align-items: center;">
+                    <!-- New File Upload Button -->
+                    <label class="file-upload-btn">
+                        <i class="fas fa-image"></i> Attach
+                        <input type="file" id="post-media" accept="image/*, video/*" onchange="document.getElementById('file-name-display').innerText = this.files[0].name">
+                    </label>
+                    <span id="file-name-display"></span>
+
+                    <input type="text" id="post-tags" placeholder="Tags (e.g., Books, BBA)" style="flex: 2; padding: 0.8rem; border-radius: 20px; border: 1px solid var(--border-color); background: var(--bg-color);">
+                    <input type="text" id="post-price" placeholder="Price (e.g., ৳ 500)" style="flex: 1; padding: 0.8rem; border-radius: 20px; border: 1px solid var(--border-color); background: var(--bg-color);">
                     <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Post</button>
                 </div>
             </form>
