@@ -52,4 +52,26 @@ const getFeedPosts = async (req, res) => {
     }
 };
 
-module.exports = { createPost, getFeedPosts };
+// @desc    Delete a post
+// @route   DELETE /api/posts/:id
+// @access  Private
+const deletePost = async (req, res) => {
+    try {
+        const post = await Post.findById(req.params.id);
+
+        if (!post) return res.status(404).json({ message: 'Post not found' });
+
+        // Ensure only the owner (or an admin) can delete the post
+        if (post.createdBy.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
+            return res.status(401).json({ message: 'Not authorized to delete this post' });
+        }
+
+        await post.deleteOne();
+        res.json({ message: 'Post removed successfully' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// Update the exports at the very bottom!
+module.exports = { createPost, getFeedPosts, deletePost };

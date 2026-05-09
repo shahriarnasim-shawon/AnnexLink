@@ -80,44 +80,38 @@ function toggleEditMode() {
 }
 
 // --- Handle Save Profile Changes ---
+// --- Handle Save Profile Changes ---
 document.getElementById('edit-profile-form').addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const newBio = document.getElementById('edit-bio').value;
     const newSkillsString = document.getElementById('edit-skills').value;
-    
-    // Convert string back to array
-    const newSkillsArray = newSkillsString.split(',').map(s => s.trim()).filter(s => s !== "");
+    const avatarFile = document.getElementById('edit-avatar').files[0];
+
+    const formData = new FormData();
+    formData.append('bio', newBio);
+    formData.append('skills', newSkillsString);
+    if (avatarFile) {
+        formData.append('avatar', avatarFile);
+    }
 
     try {
         const response = await fetch('http://localhost:8000/api/users/profile', {
             method: 'PUT',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${token}` // NO Content-Type for FormData
             },
-            body: JSON.stringify({
-                bio: newBio,
-                skills: newSkillsArray
-            })
+            body: formData
         });
 
         if (response.ok) {
             const updatedUser = await response.json();
             
-            // Update LocalStorage user info
-            const currentUserStr = localStorage.getItem('annexlink_user');
-            if (currentUserStr) {
-                const currentUser = JSON.parse(currentUserStr);
-                currentUser.bio = updatedUser.bio;
-                currentUser.skills = updatedUser.skills;
-                localStorage.setItem('annexlink_user', JSON.stringify(currentUser));
-            }
+            // Update LocalStorage
+            localStorage.setItem('annexlink_user', JSON.stringify(updatedUser));
 
-            // Update UI and close form
             renderProfile(updatedUser);
             toggleEditMode();
-            
         } else {
             alert("Failed to update profile.");
         }

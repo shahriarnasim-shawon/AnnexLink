@@ -1,12 +1,17 @@
 const express = require('express');
 const router = express.Router();
-const { createPost, getFeedPosts } = require('../controllers/postController');
-const { protect } = require('../middleware/authMiddleware');
-const upload = require('../middleware/uploadMiddleware'); // Import multer
 
-// Add upload.single('media') to intercept the image file
+// MAKE SURE deletePost IS IN THIS LIST:
+const { createPost, getFeedPosts, deletePost } = require('../controllers/postController');
+
+const { protect } = require('../middleware/authMiddleware');
+const upload = require('../middleware/uploadMiddleware');
+
 router.route('/')
     .post(protect, upload.single('media'), createPost)
     .get(protect, getFeedPosts);
+
+// Delete post route
+router.route('/:id').delete(protect, deletePost);
 
 module.exports = router;

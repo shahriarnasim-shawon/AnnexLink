@@ -196,9 +196,21 @@ function renderFeed(posts) {
                 <div class="post-price">${post.price || 'Negotiable'}</div>
                 <div class="post-actions">
                     <button class="btn btn-outline"><i class="far fa-bookmark"></i> Save</button>
-                    <!-- Small tweak: Added window.location to jump to chat -->
-                    <button class="btn btn-secondary" onclick="window.location.href='chat.html'"><i class="far fa-comment-dots"></i> Message</button>
-                    <button class="btn btn-primary">${config.primaryBtn}</button>
+                    
+                    <!-- Smart Message Button (Hides if it's your own post) -->
+                    ${post.createdBy._id !== currentUser._id ? 
+                        `<button class="btn btn-secondary" onclick="window.location.href='chat.html?userId=${post.createdBy._id}'"><i class="far fa-comment-dots"></i> Message</button>` 
+                        : ''}
+                    
+                    <!-- Apply/Hire Button -->
+                    ${post.createdBy._id !== currentUser._id ? 
+                        `<button class="btn btn-primary">${config.primaryBtn}</button>` 
+                        : ''}
+
+                    <!-- Delete Button (ONLY shows if you own the post) -->
+                    ${post.createdBy._id === currentUser._id ? 
+                        `<button class="btn btn-outline" style="color: #E63946; border-color: #E63946;" onclick="deletePost('${post._id}')"><i class="fas fa-trash"></i> Delete</button>` 
+                        : ''}
                 </div>
             </div>
         `;
@@ -224,4 +236,23 @@ if (logoutBtn) {
         e.preventDefault(); // Stop normal link behavior
         logout();
     });
+}
+
+async function deletePost(postId) {
+    if(!confirm("Are you sure you want to delete this post?")) return;
+
+    try {
+        const response = await fetch(`http://localhost:8000/api/posts/${postId}`, {
+            method: 'DELETE',
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (response.ok) {
+            fetchFeed(); // Reload feed so the post vanishes
+        } else {
+            alert("Failed to delete post");
+        }
+    } catch (error) {
+        console.error(error);
+    }
 }

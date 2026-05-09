@@ -29,8 +29,18 @@ const updateUserProfile = async (req, res) => {
         if (user) {
             user.name = req.body.name || user.name;
             user.bio = req.body.bio || user.bio;
-            user.skills = req.body.skills || user.skills;
-            user.avatar = req.body.avatar || user.avatar;
+            
+            // Handle skills if they are passed as a string from FormData
+            if (req.body.skills) {
+                user.skills = typeof req.body.skills === 'string' 
+                    ? req.body.skills.split(',').map(s => s.trim()).filter(s => s !== "")
+                    : req.body.skills;
+            }
+
+            // If a new avatar file was uploaded, save its path
+            if (req.file) {
+                user.avatar = `/uploads/${req.file.filename}`;
+            }
 
             const updatedUser = await user.save();
 

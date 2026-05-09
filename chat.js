@@ -49,6 +49,7 @@ async function loadContacts() {
 
             const userEl = document.createElement('div');
             userEl.className = 'chat-user';
+            userEl.dataset.userid = user._id;
             userEl.onclick = () => selectUser(user._id, user.name, avatarUrl, userEl);
             
             userEl.innerHTML = `
@@ -194,6 +195,17 @@ function scrollToBottom() {
 }
 
 // Load contacts as soon as the page loads
-document.addEventListener('DOMContentLoaded', () => {
-    loadContacts();
+// Load contacts as soon as the page loads
+document.addEventListener('DOMContentLoaded', async () => {
+    await loadContacts();
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const autoUserId = urlParams.get('userId');
+
+    if (autoUserId) {
+        const targetElement = document.querySelector(`.chat-user[data-userid="${autoUserId}"]`);
+        if (targetElement) {
+            targetElement.click(); // Automatically opens chat!
+        }
+    }
 });
