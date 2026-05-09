@@ -1,14 +1,19 @@
 const express = require('express');
 const router = express.Router();
-const { getUserProfile, updateUserProfile, addReview } = require('../controllers/userController');
+
+// MAKE SURE getUsersForChat IS INSIDE THESE BRACES!
+const { getUserProfile, updateUserProfile, addReview, getUsersForChat } = require('../controllers/userController');
 const { protect } = require('../middleware/authMiddleware');
 
-// Profile routes (Both GET and PUT on the exact same URL)
+// Route to get all users for chat sidebar
+router.route('/').get(protect, getUsersForChat);
+
+// Profile routes
 router.route('/profile')
     .get(protect, getUserProfile)
     .put(protect, updateUserProfile);
 
-// Review route (Needs the ID of the user being reviewed in the URL)
+// Review route
 router.route('/:id/reviews').post(protect, addReview);
 
 module.exports = router;

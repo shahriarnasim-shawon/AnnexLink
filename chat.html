@@ -88,32 +88,34 @@
                 <div class="chat-search">
                     <input type="text" placeholder="Search messages...">
                 </div>
-                <div class="chat-list">
-                    <!-- Active User -->
-                    <div class="chat-user active">
-                        <img src="https://ui-avatars.com/api/?name=Ayesha+Siddiqa&background=20B2AA&color=fff" class="avatar">
-                        <div class="chat-user-info">
-                            <h4>Ayesha Siddiqa <span class="chat-time">10:42 AM</span></h4>
-                            <p class="chat-preview">Are you available for a quick meeting?</p>
-                        </div>
-                    </div>
-                    <!-- Other User -->
-                    <div class="chat-user">
-                        <img src="https://ui-avatars.com/api/?name=Samiul+Haque&background=0A192F&color=fff" class="avatar">
-                        <div class="chat-user-info">
-                            <h4>Samiul Haque <span class="chat-time">Yesterday</span></h4>
-                            <p class="chat-preview">Thanks for helping me with DSA!</p>
-                        </div>
-                    </div>
-                    <!-- Other User -->
-                    <div class="chat-user">
-                        <img src="https://ui-avatars.com/api/?name=Nafisa+Yasmin&background=FF8C00&color=fff" class="avatar">
-                        <div class="chat-user-info">
-                            <h4>Nafisa Yasmin <span class="chat-time">Tuesday</span></h4>
-                            <p class="chat-preview">Can you send the Figma file?</p>
-                        </div>
-                    </div>
+                <div class="chat-list" id="contacts-list">
+                    <!-- Dynamic Users will be injected here -->
                 </div>
+            </div>
+
+            <!-- Chat Window -->
+            <div class="chat-window">
+                <div class="chat-header">
+                    <div class="chat-header-info">
+                        <img id="chat-header-avatar" src="https://ui-avatars.com/api/?name=Select+User&background=20B2AA&color=fff" class="avatar">
+                        <div>
+                            <h3 id="chat-header-name">Select a user to start chatting</h3>
+                            <p id="chat-header-status">Offline</p>
+                        </div>
+                    </div>
+                    <div class="icon-btn"><i class="fas fa-ellipsis-v"></i></div>
+                </div>
+                
+                <!-- Messages Container -->
+                <div class="chat-messages" id="chat-box">
+                    <p style="text-align:center; color:var(--text-muted); margin-top:2rem;">No messages yet. Say hi!</p>
+                </div>
+
+                <div class="chat-input-area">
+                    <input type="text" id="message-input" placeholder="Type your message here..." onkeypress="handleKeyPress(event)" disabled>
+                    <button id="send-btn" class="btn-send" onclick="sendMessage()" disabled><i class="fas fa-paper-plane"></i></button>
+                </div>
+            </div>
             </div>
 
             <!-- Chat Window -->
@@ -154,6 +156,11 @@
     </div>
 
     <!-- Script for Chat & Notifications -->
+    <!-- Socket.io Client Library -->
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <!-- Our Custom Chat Script -->
     <script src="chat.js"></script>
+</body>
+</html> 
 </body>
 </html>

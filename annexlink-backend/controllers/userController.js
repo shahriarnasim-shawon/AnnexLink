@@ -96,5 +96,18 @@ const addReview = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+// @desc    Get all users for the chat sidebar (excluding the logged-in user)
+// @route   GET /api/users
+// @access  Private
+const getUsersForChat = async (req, res) => {
+    try {
+        // Find all users EXCEPT the currently logged-in user
+        const users = await User.find({ _id: { $ne: req.user._id } }).select('-password');
+        res.json(users);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
 
-module.exports = { getUserProfile, updateUserProfile, addReview };
+
+module.exports = { getUserProfile, updateUserProfile, addReview, getUsersForChat };
