@@ -74,4 +74,18 @@ const deletePost = async (req, res) => {
 };
 
 // Update the exports at the very bottom!
-module.exports = { createPost, getFeedPosts, deletePost };
+// @desc    Get logged in user's posts
+// @route   GET /api/posts/mine
+// @access  Private
+const getMyPosts = async (req, res) => {
+    try {
+        // Find posts where the creator is the currently logged-in user
+        const posts = await Post.find({ createdBy: req.user._id }).sort({ createdAt: -1 });
+        res.json(posts);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+
+module.exports = { createPost, getFeedPosts, deletePost, getMyPosts };

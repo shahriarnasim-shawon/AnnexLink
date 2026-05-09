@@ -1,4 +1,5 @@
 const Message = require('../models/Message');
+const Notification = require('../models/Notification'); // IMPORT NOTIFICATION MODEL
 
 // @desc    Send a new message
 // @route   POST /api/messages
@@ -11,23 +12,28 @@ const sendMessage = async (req, res) => {
             return res.status(400).json({ message: "Please provide receiverId and text data" });
         }
 
-        // Create and save the message to MongoDB
         const message = await Message.create({
             sender: req.user._id,
             receiver: receiverId,
             text: text
         });
 
-        // Populate the sender's info (so the frontend can show their avatar/name)
-        const populatedMessage = await message.populate('sender', 'name avatar');
+        // --- NEW: CREATE A NOTIFICATION FOR THE RECEIVER ---
+        await Notification.create({
+            user: receiverId,
+            type: 'Message',
+            content: `You have a new message from ${req.user.name}`,
+            relatedLink: `chat.html?userId=${req.user._id}` // Clicking it will open chat with this user!
+        });
 
+        const populatedMessage = await message.populate('sender', 'name avatar');
         res.status(201).json(populatedMessage);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
 
-// @desc    Get chat history between logged-in user and another user
+// @desc    Get chat history
 // @route   GET /api/messages/:userId
 // @access  Private
 const getMessages = async (req, res) => {
@@ -35,7 +41,6 @@ const getMessages = async (req, res) => {
         const otherUserId = req.params.userId;
         const myUserId = req.user._id;
 
-        // Find all messages where (I am sender AND they are receiver) OR (They are sender AND I am receiver)
         const messages = await Message.find({
             $or:[
                 { sender: myUserId, receiver: otherUserId },
@@ -43,7 +48,7 @@ const getMessages = async (req, res) => {
             ]
         })
         .populate('sender', 'name avatar')
-        .sort({ createdAt: 1 }); // Sort by oldest to newest (standard chat layout)
+        .sort({ createdAt: 1 }); 
 
         res.json(messages);
     } catch (error) {
