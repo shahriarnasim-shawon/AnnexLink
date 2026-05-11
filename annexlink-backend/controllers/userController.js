@@ -183,7 +183,25 @@ const getUserDashboard = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+// @desc    Delete own user account
+// @route   DELETE /api/users/profile
+// @access  Private
+const deleteOwnAccount = async (req, res) => {
+    try {
+        const user = await User.findById(req.user._id);
+        if (user) {
+            await user.deleteOne();
+            res.json({ message: 'Account deleted successfully' });
+        } else {
+            res.status(404).json({ message: 'User not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
 
-module.exports = { getUserProfile, updateUserProfile, addReview, getUsersForChat, getTopUsers, getUserById, getUserDashboard };
+// Don't forget to export it!
+module.exports = { getUserProfile, updateUserProfile, addReview, getUsersForChat, getTopUsers, getUserById, getUserDashboard, deleteOwnAccount };
+
 
 

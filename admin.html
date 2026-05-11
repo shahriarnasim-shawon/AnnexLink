@@ -43,23 +43,23 @@
                 <button class="btn btn-primary"><i class="fas fa-download"></i> Download Report</button>
             </div>
 
-            <!-- Admin Statistics -->
+           <!-- Admin Statistics -->
             <div class="admin-stats">
                 <div class="stat-card-admin">
                     <h3>Total Users</h3>
-                    <p>1,245</p>
+                    <p id="admin-total-users">...</p>
                 </div>
                 <div class="stat-card-admin">
                     <h3>Active Posts</h3>
-                    <p>342</p>
+                    <p id="admin-active-posts">...</p>
                 </div>
                 <div class="stat-card-admin">
-                    <h3>Transactions</h3>
-                    <p>৳ 45.2k</p>
+                    <h3>Total Reviews</h3>
+                    <p id="admin-total-reviews">...</p>
                 </div>
                 <div class="stat-card-admin">
                     <h3>Pending Reports</h3>
-                    <p>8</p>
+                    <p>0</p>
                 </div>
             </div>
 
@@ -76,69 +76,7 @@
                         </tr>
                     </thead>
                     <tbody id="user-table-body">
-                        <!-- User Row 1 -->
-                        <tr>
-                            <td>
-                                <div class="user-cell">
-                                    <img src="https://ui-avatars.com/api/?name=John+Doe&background=0A192F&color=fff" alt="User">
-                                    <div>
-                                        <h4>John Doe</h4>
-                                        <p>john.doe@student.bup.edu.bd</p>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>BBA (Batch 2022)</td>
-                            <td><span class="status-badge status-active">Active</span></td>
-                            <td>
-                                <div class="admin-actions">
-                                    <button class="btn-small btn-view" title="View Profile"><i class="fas fa-eye"></i></button>
-                                    <button class="btn-small btn-ban" onclick="toggleBan(this)" title="Ban User"><i class="fas fa-ban"></i></button>
-                                    <button class="btn-small btn-delete" onclick="deleteRow(this)" title="Delete User"><i class="fas fa-trash"></i></button>
-                                </div>
-                            </td>
-                        </tr>
-                        <!-- User Row 2 -->
-                        <tr>
-                            <td>
-                                <div class="user-cell">
-                                    <img src="https://ui-avatars.com/api/?name=Jane+Smith&background=20B2AA&color=fff" alt="User">
-                                    <div>
-                                        <h4>Jane Smith</h4>
-                                        <p>jane.smith@student.bup.edu.bd</p>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>CSE (Batch 2021)</td>
-                            <td><span class="status-badge status-reported">Reported</span></td>
-                            <td>
-                                <div class="admin-actions">
-                                    <button class="btn-small btn-view" title="View Profile"><i class="fas fa-eye"></i></button>
-                                    <button class="btn-small btn-ban" onclick="toggleBan(this)" title="Ban User"><i class="fas fa-ban"></i></button>
-                                    <button class="btn-small btn-delete" onclick="deleteRow(this)" title="Delete User"><i class="fas fa-trash"></i></button>
-                                </div>
-                            </td>
-                        </tr>
-                        <!-- User Row 3 -->
-                        <tr>
-                            <td>
-                                <div class="user-cell">
-                                    <img src="https://ui-avatars.com/api/?name=Ali+Hasan&background=FF8C00&color=fff" alt="User">
-                                    <div>
-                                        <h4>Ali Hasan</h4>
-                                        <p>ali.hasan@student.bup.edu.bd</p>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>IR (Batch 2020)</td>
-                            <td><span class="status-badge status-banned">Banned</span></td>
-                            <td>
-                                <div class="admin-actions">
-                                    <button class="btn-small btn-view" title="View Profile"><i class="fas fa-eye"></i></button>
-                                    <button class="btn-small btn-ban" onclick="toggleBan(this)" title="Unban User"><i class="fas fa-undo"></i></button>
-                                    <button class="btn-small btn-delete" onclick="deleteRow(this)" title="Delete User"><i class="fas fa-trash"></i></button>
-                                </div>
-                            </td>
-                        </tr>
+                        
                     </tbody>
                 </table>
             </div>

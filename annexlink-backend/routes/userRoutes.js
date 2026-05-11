@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { getUserProfile, updateUserProfile, addReview, getUsersForChat, getTopUsers, getUserById, getUserDashboard } = require('../controllers/userController');
+const { getUserProfile, updateUserProfile, addReview, getUsersForChat, getTopUsers, getUserById, getUserDashboard, deleteOwnAccount } = require('../controllers/userController');
 const { protect } = require('../middleware/authMiddleware');
 const upload = require('../middleware/uploadMiddleware');
 
@@ -10,7 +10,8 @@ router.route('/top').get(protect, getTopUsers); // MUST BE BEFORE /profile and /
 
 router.route('/profile')
     .get(protect, getUserProfile)
-    .put(protect, upload.single('avatar'), updateUserProfile);
+    .put(protect, upload.single('avatar'), updateUserProfile)
+    .delete(protect, deleteOwnAccount);
 
 router.route('/dashboard').get(protect, getUserDashboard);
 router.route('/:id').get(protect, getUserById); // Get public profile
