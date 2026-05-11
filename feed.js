@@ -11,17 +11,62 @@ const currentUser = JSON.parse(userStr);
 
 // Set current user's avatar in the UI when page loads
 // Set current user's avatar in the UI
+// Set current user's avatar in the UI
 document.addEventListener('DOMContentLoaded', () => {
-    const avatarUrl = currentUser.avatar || `https://ui-avatars.com/api/?name=${currentUser.name}&background=0A192F&color=fff`;
+    // 1. Fix the Avatar URL to include localhost if it's an uploaded file
+    const avatarUrl = (!currentUser.avatar || currentUser.avatar === "default-avatar.png") 
+        ? `https://ui-avatars.com/api/?name=${currentUser.name}&background=0A192F&color=fff` 
+        : (currentUser.avatar.startsWith('http') ? currentUser.avatar : `http://localhost:8000${currentUser.avatar}`);
     
-    // Set the "Create Post" box avatar
-    document.getElementById('current-user-avatar').src = avatarUrl;
+    // 2. Set the "Create Post" box avatar
+    const currentUserImg = document.getElementById('current-user-avatar');
+    if (currentUserImg) currentUserImg.src = avatarUrl;
     
-    // Set the Top Navbar avatar (Selects the last image in the nav-right div)
+    // 3. Set the Top Navbar avatar
     const navAvatar = document.querySelector('.nav-right .avatar');
-    if(navAvatar) navAvatar.src = avatarUrl;
+    if (navAvatar) navAvatar.src = avatarUrl;
 
-    fetchFeed(); // Load feed when page loads
+    // 4. Check if we arrived here from "Add New Service" or "New Request"
+    const urlParams = new URLSearchParams(window.location.search);
+    const postType = urlParams.get('type');
+    if (postType) {
+        const typeDropdown = document.getElementById('post-type');
+        if (typeDropdown) {
+            typeDropdown.value = postType; // Auto-select Service or Request
+            document.getElementById('post-title').focus(); // Jump to the input box
+        }
+    }
+    async function loadDynamicSidebars() {
+    try {
+        // Fetch Top Students
+        const userRes = await fetch('http://localhost:8000/api/users/top', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        
+        if (userRes.ok) {
+            const topUsers = await userRes.json();
+            const topUsersList = document.querySelector('.widget-list'); // "Suggested Services" ul
+            if (topUsersList) {
+                topUsersList.innerHTML = '';
+                topUsers.forEach(user => {
+                    topUsersList.innerHTML += `
+                        <li style="cursor:pointer;" onclick="window.location.href='user-profile.html?id=${user._id}'">
+                            <div>
+                                <strong style="color:var(--primary-navy);">${user.name}</strong>
+                                <p class="text-sm">${user.department}</p>
+                            </div>
+                            <span class="text-sm">⭐ ${user.rating.toFixed(1)}</span>
+                        </li>`;
+                });
+            }
+        }
+    } catch (err) { console.error("Error loading sidebars", err); }
+}
+
+// Add this to your DOMContentLoaded listener in feed.js:
+    loadDynamicSidebars();
+
+    fetchFeed(); 
 });
 
 // --- 2. Post Creation Logic (Now with Image Support) ---
@@ -176,7 +221,7 @@ function renderFeed(posts) {
                 <div class="user-info">
                     <img src="${creatorAvatar.startsWith('http') ? creatorAvatar : `https://ui-avatars.com/api/?name=${encodeURIComponent(creatorName)}&background=0A192F&color=fff`}" alt="${creatorName}" class="avatar">
                     <div>
-                        <h4>${creatorName} <span class="text-sm">⭐ ${creatorRating}</span></h4>
+                        <h4><a href="user-profile.html?id=${post.createdBy ? post.createdBy._id : ''}" style="color:var(--primary-navy);">${creatorName}</a> <span class="text-sm">⭐ ${creatorRating}</span></h4>
                         <p class="text-sm">${timeSince(post.createdAt)}</p>
                     </div>
                 </div>
@@ -256,3 +301,4 @@ async function deletePost(postId) {
         console.error(error);
     }
 }
+

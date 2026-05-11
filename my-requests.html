@@ -15,6 +15,13 @@
             <a href="feed.html" class="logo-text">Annex<span>Link</span></a>
         </div>
         <div class="nav-right">
+            <!-- Dark Mode Toggle -->
+            <div class="icon-btn theme-switch" id="theme-toggle" title="Toggle Dark Mode">
+                <i class="fas fa-moon"></i>
+            </div>
+            
+            <!-- Notifications Wrapper -->
+            <!-- ... rest of your nav-right ... -->
             <div class="icon-btn"><i class="fas fa-bell"></i><span class="badge">3</span></div>
             <a href="chat.html" class="icon-btn"><i class="fas fa-envelope"></i></a>
             <img src="https://ui-avatars.com/api/?name=Rakib+Hasan&background=0A192F&color=fff" alt="Profile" class="avatar">
@@ -42,7 +49,7 @@
             
             <div class="page-header">
                 <h2>My Requests & Hiring Posts</h2>
-                <button class="btn btn-primary"><i class="fas fa-plus"></i> Post a Request</button>
+                <button class="btn btn-primary" onclick="window.location.href='feed.html?type=Request'"><i class="fas fa-plus"></i> Post a Request</button>
             </div>
 
             <!-- Request Card 1 -->
@@ -97,6 +104,7 @@
     </div>
 
     <script src="manage.js"></script>
+    <script src="theme.js"></script>
 
 </body>
 </html>

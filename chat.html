@@ -15,11 +15,18 @@
             <a href="feed.html" class="logo-text">Annex<span>Link</span></a>
             <div class="search-bar">
                 <i class="fas fa-search"></i>
-                <input type="text" placeholder="Search services, skills, users...">
+                <input type="text" id="global-search" placeholder="Search services, skills, users...">
+                <div id="search-dropdown" class="search-dropdown"></div>
             </div>
         </div>
         <div class="nav-right">
+            <!-- Dark Mode Toggle -->
+            <div class="icon-btn theme-switch" id="theme-toggle" title="Toggle Dark Mode">
+                <i class="fas fa-moon"></i>
+            </div>
             
+            <!-- Notifications Wrapper -->
+            <!-- ... rest of your nav-right ... -->
             <!-- Notifications Wrapper -->
             <div class="notification-wrapper">
                 <div class="icon-btn" id="notif-bell" onclick="toggleNotifications()">
@@ -160,6 +167,8 @@
     <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
     <!-- Our Custom Chat Script -->
     <script src="chat.js"></script>
+    <script src="search.js"></script>
+    <script src="theme.js"></script>
 </body>
 </html> 
 </body>

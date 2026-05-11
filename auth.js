@@ -39,13 +39,19 @@ async function handleLogin(event) {
         const data = await response.json();
 
         if (response.ok) {
-            // SUCCESS! Save token and user info to LocalStorage
             localStorage.setItem('annexlink_token', data.token);
             localStorage.setItem('annexlink_user', JSON.stringify(data));
             
             alert('Login Successful! Welcome ' + data.name);
-            window.location.href = "feed.html"; // Redirect to Feed
-        } else {
+
+            // ADMIN ROUTING
+            if (data.role === 'admin') {
+                window.location.href = "admin.html";
+            } else {
+                window.location.href = "feed.html";
+            }
+        }
+        else {
             // FAILED (Wrong password, banned, etc.)
             alert('Login Failed: ' + data.message);
         }

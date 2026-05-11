@@ -302,3 +302,48 @@ input:checked + .slider:before { transform: translateX(22px); }
 .file-upload-btn input[type="file"] { display: none; }
 .post-media-img { width: 100%; max-height: 400px; object-fit: cover; border-radius: var(--radius); margin-bottom: 1rem; border: 1px solid var(--border-color); }
 #file-name-display { font-size: 0.85rem; color: var(--accent-teal); overflow: hidden; white-space: nowrap; text-overflow: ellipsis; max-width: 150px; }
+/* Search & Public Profile Styles */
+.search-bar { position: relative; }
+.search-dropdown { position: absolute; top: 100%; left: 0; width: 100%; background: var(--card-bg); border-radius: 8px; box-shadow: 0 8px 16px rgba(0,0,0,0.1); margin-top: 0.5rem; z-index: 1000; overflow: hidden; border: 1px solid var(--border-color); display: none; }
+.search-category { padding: 0.5rem 1rem; background: var(--bg-color); font-size: 0.8rem; font-weight: bold; color: var(--primary-navy); text-transform: uppercase; border-bottom: 1px solid var(--border-color); }
+.search-item { padding: 0.8rem 1rem; border-bottom: 1px solid var(--border-color); cursor: pointer; display: flex; align-items: center; gap: 0.8rem; transition: 0.2s; color: var(--text-main); }
+.search-item:hover { background: var(--bg-color); color: var(--accent-teal); }
+.search-item img { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; }
+
+/* Star Rating Input */
+.star-rating { display: flex; flex-direction: row-reverse; justify-content: flex-end; gap: 0.5rem; font-size: 1.5rem; }
+.star-rating input { display: none; }
+.star-rating label { color: #ccc; cursor: pointer; transition: 0.2s; }
+.star-rating label:hover, .star-rating label:hover ~ label, .star-rating input:checked ~ label { color: var(--accent-orange); }
+/* --- DARK MODE THEME --- */
+body.dark-mode {
+    --bg-color: #020c1b;
+    --card-bg: #112240;
+    --text-main: #ccd6f6;
+    --text-muted: #8892b0;
+    --border-color: #233554;
+    --shadow: 0 4px 12px rgba(0,0,0,0.5);
+    --primary-navy: #64ffda; /* Make navy text teal in dark mode for visibility */
+}
+
+/* Ensure inputs look good in dark mode */
+body.dark-mode input, 
+body.dark-mode textarea, 
+body.dark-mode select {
+    color: var(--text-main);
+    background: var(--bg-color);
+}
+
+body.dark-mode .nav-links li:hover, 
+body.dark-mode .nav-links li.active {
+    background: #020c1b;
+}
+
+/* Theme Toggle Button */
+.theme-switch {
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: var(--primary-navy);
+    transition: 0.3s;
+}
+.theme-switch:hover { color: var(--accent-orange); }
