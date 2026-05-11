@@ -1,16 +1,19 @@
 const express = require('express');
 const router = express.Router();
-const { getUserProfile, updateUserProfile, addReview, getUsersForChat } = require('../controllers/userController');
+const { getUserProfile, updateUserProfile, addReview, getUsersForChat, getTopUsers, getUserById, getUserDashboard } = require('../controllers/userController');
 const { protect } = require('../middleware/authMiddleware');
-const upload = require('../middleware/uploadMiddleware'); // Import multer
+const upload = require('../middleware/uploadMiddleware');
 
 router.route('/').get(protect, getUsersForChat);
 
-// ADD upload.single('avatar') to the PUT route!
+router.route('/top').get(protect, getTopUsers); // MUST BE BEFORE /profile and /:id
+
 router.route('/profile')
     .get(protect, getUserProfile)
     .put(protect, upload.single('avatar'), updateUserProfile);
 
-router.route('/:id/reviews').post(protect, addReview);
+router.route('/dashboard').get(protect, getUserDashboard);
+router.route('/:id').get(protect, getUserById); // Get public profile
+router.route('/:id/reviews').post(protect, addReview); // Leave a review
 
 module.exports = router;

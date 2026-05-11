@@ -5,6 +5,8 @@ const connectDB = require('./config/db');
 const http = require('http'); 
 const { Server } = require('socket.io'); 
 const path = require('path');
+const searchRoutes = require('./routes/searchRoutes'); // Add at the top
+
 
 // Import Routes
 const authRoutes = require('./routes/authRoutes');
@@ -37,6 +39,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/messages', messageRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/notifications', notificationRoutes);
+app.use('/api/search', searchRoutes);
 
 // Base route test
 app.get('/', (req, res) => {

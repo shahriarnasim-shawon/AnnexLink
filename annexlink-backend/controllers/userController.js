@@ -120,4 +120,70 @@ const getUsersForChat = async (req, res) => {
 };
 
 
-module.exports = { getUserProfile, updateUserProfile, addReview, getUsersForChat };
+// @desc    Get top 3 users by rating
+// @route   GET /api/users/top
+// @access  Private
+const getTopUsers = async (req, res) => {
+    try {
+        const users = await User.find({ role: 'student', rating: { $gt: 0 } })
+            .sort({ rating: -1 })
+            .limit(3)
+            .select('name avatar rating department');
+        res.json(users);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// @desc    Get a specific user's public profile and reviews
+// @route   GET /api/users/:id
+// @access  Private
+const getUserById = async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id).select('-password');
+        if (!user) return res.status(404).json({ message: 'User not found' });
+
+        // Fetch all reviews left for this user
+        const Review = require('../models/Review');
+        const reviews = await Review.find({ reviewee: req.params.id })
+            .populate('reviewer', 'name avatar')
+            .sort({ createdAt: -1 });
+
+        res.json({ user, reviews });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// @desc    Get user dashboard stats
+// @route   GET /api/users/dashboard
+// @access  Private
+const getUserDashboard = async (req, res) => {
+    try {
+        const Post = require('../models/Post');
+        
+        // Find all posts by this user
+        const myPosts = await Post.find({ createdBy: req.user._id }).sort({ createdAt: -1 });
+
+        // Calculate Stats
+        const activeServices = myPosts.filter(p => p.type === 'Service' && p.status === 'Active').length;
+        const pendingRequests = myPosts.filter(p => (p.type === 'Request' || p.type === 'Hiring') && p.status === 'Active').length;
+
+        // Mock earning calculation (we will replace this with real Payment data later)
+        const earned = req.user.rating * 1500; 
+
+        // Send back stats and the 5 most recent activities
+        res.json({
+            activeServices,
+            pendingRequests,
+            earned: earned.toFixed(0),
+            recentActivity: myPosts.slice(0, 5) // Only top 5
+        });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+module.exports = { getUserProfile, updateUserProfile, addReview, getUsersForChat, getTopUsers, getUserById, getUserDashboard };
+
+

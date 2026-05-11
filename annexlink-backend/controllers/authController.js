@@ -18,6 +18,11 @@ const registerUser = async (req, res) => {
             return res.status(400).json({ message: 'Must use a valid @student.bup.edu.bd email' });
         }
 
+        const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&]{8,}$/;
+        if (!passwordRegex.test(password)) {
+            return res.status(400).json({ message: 'Password must be at least 8 characters long and contain at least one letter and one number.' });
+        }
+
         // Create the user
         const user = await User.create({
             name,
