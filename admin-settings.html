@@ -42,16 +42,10 @@
                 <!-- General Settings -->
                 <div class="settings-group">
                     <h3>General Settings</h3>
-                    <form class="settings-form" onsubmit="event.preventDefault();">
-                        <div>
-                            <label>Platform Name</label>
-                            <input type="text" value="AnnexLink">
-                        </div>
-                        <div>
-                            <label>Admin Support Email</label>
-                            <input type="email" value="support@student.bup.edu.bd">
-                        </div>
-                    </form>
+                    <form class="settings-form" id="admin-settings-form">
+                        <div><label>Platform Name</label><input type="text" id="set-name"></div>
+                            <div><label>Admin Support Email</label><input type="email" id="set-email"></div>
+                    </form> 
                 </div>
 
                 <!-- Category Management -->

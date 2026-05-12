@@ -140,3 +140,27 @@ document.getElementById('logout-btn').addEventListener('click', (e) => {
     localStorage.clear();
     window.location.href = "index.html";
 });
+
+async function submitReport() {
+    const reason = prompt("Why are you reporting this user? (Spam, Scam, Inappropriate Behavior)");
+    if (!reason) return;
+
+    try {
+        const response = await fetch(`http://localhost:8000/api/users/${targetUserId}/report`, {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` 
+            },
+            body: JSON.stringify({ reason })
+        });
+        if (response.ok) {
+            alert("User reported successfully. Admins will review this.");
+        } else {
+            const data = await response.json();
+            alert(data.message);
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}

@@ -199,9 +199,40 @@ const deleteOwnAccount = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+// @desc    Report a user
+// @route   POST /api/users/:id/report
+// @access  Private
+const reportUser = async (req, res) => {
+    try {
+        const Report = require('../models/Report');
+        const reportedUserId = req.params.id;
 
-// Don't forget to export it!
-module.exports = { getUserProfile, updateUserProfile, addReview, getUsersForChat, getTopUsers, getUserById, getUserDashboard, deleteOwnAccount };
+        if (reportedUserId === req.user._id.toString()) {
+            return res.status(400).json({ message: "You cannot report yourself" });
+        }
+
+        // Change the reported user's status to 'Reported' (unless they are already banned)
+        const user = await User.findById(reportedUserId);
+        if (user && user.status === 'Active') {
+            user.status = 'Reported';
+            await user.save();
+        }
+
+        const report = await Report.create({
+            reporter: req.user._id,
+            reportedUser: reportedUserId,
+            reason: req.body.reason
+        });
+
+        res.status(201).json({ message: 'User reported successfully', report });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// Update exports to include reportUser!
+module.exports = { getUserProfile, updateUserProfile, addReview, getUsersForChat, getTopUsers, getUserById, getUserDashboard, deleteOwnAccount, reportUser };
+
 
 
 
