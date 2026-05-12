@@ -87,5 +87,19 @@ const getMyPosts = async (req, res) => {
     }
 };
 
+// @desc    Get a single post by ID
+// @route   GET /api/posts/:id
+// @access  Private
+const getPostById = async (req, res) => {
+    try {
+        const post = await Post.findById(req.params.id).populate('createdBy', 'name avatar email');
+        if (!post) return res.status(404).json({ message: 'Post not found' });
+        res.json(post);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
 
-module.exports = { createPost, getFeedPosts, deletePost, getMyPosts };
+// Update exports!
+module.exports = { createPost, getFeedPosts, deletePost, getMyPosts, getPostById };
+

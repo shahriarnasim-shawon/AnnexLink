@@ -14,7 +14,8 @@ const postRoutes = require('./routes/postRoutes');
 const userRoutes = require('./routes/userRoutes');
 const messageRoutes = require('./routes/messageRoutes'); 
 const adminRoutes = require('./routes/adminRoutes'); // From Step 8
-const notificationRoutes = require('./routes/notificationRoutes'); // From Step 8
+const notificationRoutes = require('./routes/notificationRoutes');
+const paymentRoutes = require('./routes/paymentRoutes'); // From Step 8
 
 // Load env variables
 dotenv.config();
@@ -40,7 +41,7 @@ app.use('/api/messages', messageRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/search', searchRoutes);
-
+app.use('/api/payments', paymentRoutes);
 // Base route test
 app.get('/', (req, res) => {
     res.send('AnnexLink API is running...');
