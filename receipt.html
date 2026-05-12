@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AnnexLink | Payment Receipt</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- PDF Generator Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-left"><a href="feed.html" class="logo-text">Annex<span>Link</span></a></div>
+        <div class="nav-right"><a href="feed.html" class="btn btn-outline">Back to Feed</a></div>
+    </nav>
+
+    <div class="container" style="display: flex; justify-content: center; margin-top: 2rem;">
+        <div class="card" style="width: 100%; max-width: 600px;">
+            
+            <!-- The actual receipt area to be printed -->
+            <div id="receipt-content" style="padding: 2rem; border: 1px solid var(--border-color); border-radius: 8px;">
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <i class="fas fa-check-circle" style="font-size: 3rem; color: var(--accent-teal); margin-bottom: 1rem;"></i>
+                    <h2 style="color: var(--primary-navy);">Payment Successful!</h2>
+                    <p class="text-sm">Thank you for using AnnexLink.</p>
+                </div>
+
+                <div style="margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px dashed var(--border-color);">
+                    <p><strong>Transaction ID:</strong> <span id="r-txn">...</span></p>
+                    <p><strong>Date:</strong> <span id="r-date">...</span></p>
+                    <p><strong>Status:</strong> <span style="color: var(--accent-teal); font-weight: bold;">Completed</span></p>
+                </div>
+
+                <div style="margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px dashed var(--border-color);">
+                    <h4 style="margin-bottom: 0.5rem; color: var(--primary-navy);">Item Details</h4>
+                    <p id="r-item">...</p>
+                    <p class="text-sm">Seller: <span id="r-seller">...</span></p>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; font-size: 1.2rem; font-weight: bold; margin-top: 1rem;">
+                    <span>Amount Paid:</span>
+                    <span style="color: var(--accent-orange);">৳ <span id="r-amount">0</span></span>
+                </div>
+                <p class="text-sm" style="text-align: right; margin-top: 0.5rem;">Method: <span id="r-method">...</span></p>
+            </div>
+
+            <!-- Download Button (Excluded from PDF) -->
+            <button class="btn btn-primary" onclick="downloadReceipt()" style="width: 100%; margin-top: 1.5rem; font-size: 1.1rem;">
+                <i class="fas fa-file-pdf"></i> Download Receipt
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const token = localStorage.getItem('annexlink_token');
+        const urlParams = new URLSearchParams(window.location.search);
+        const txnId = urlParams.get('txnId');
+
+        if (!token || !txnId) window.location.href = "feed.html";
+
+        async function loadReceipt() {
+            const res = await fetch(`http://localhost:8000/api/payments/${txnId}`, { headers: {'Authorization': `Bearer ${token}`} });
+            if (res.ok) {
+                const txn = await res.json();
+                document.getElementById('r-txn').innerText = txn.transactionId;
+                document.getElementById('r-date').innerText = new Date(txn.createdAt).toLocaleString();
+                document.getElementById('r-item').innerText = txn.post.title;
+                document.getElementById('r-seller').innerText = txn.seller.name;
+                document.getElementById('r-amount').innerText = txn.amount;
+                document.getElementById('r-method').innerText = txn.paymentMethod;
+            }
+        }
+
+        function downloadReceipt() {
+            const element = document.getElementById('receipt-content');
+            const opt = {
+                margin:       0.5,
+                filename:     `Receipt_${document.getElementById('r-txn').innerText}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2 },
+                jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(element).save();
+        }
+
+        loadReceipt();
+    </script>
+</body>
+</html>

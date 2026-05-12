@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AnnexLink | Secure Checkout</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .checkout-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; max-width: 1000px; margin: 2rem auto; }
+        .payment-method { border: 1px solid var(--border-color); padding: 1rem; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+        .payment-method:hover { border-color: var(--accent-teal); background: rgba(32, 178, 170, 0.05); }
+        .payment-method.active { border: 2px solid var(--accent-teal); background: rgba(32, 178, 170, 0.1); }
+        @media(max-width: 768px) { .checkout-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-left"><a href="feed.html" class="logo-text">Annex<span>Link</span> Checkout</a></div>
+        <div class="nav-right"><div class="icon-btn" onclick="window.history.back()"><i class="fas fa-times"></i> Cancel</div></div>
+    </nav>
+
+    <div class="container checkout-grid">
+        <!-- Order Summary -->
+        <div class="card">
+            <h3 style="color: var(--primary-navy); margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem;">Order Summary</h3>
+            <div id="order-details">
+                <p>Loading details...</p>
+            </div>
+        </div>
+
+        <!-- Payment Form -->
+        <div class="card">
+            <h3 style="color: var(--primary-navy); margin-bottom: 1.5rem;">Payment Method</h3>
+            
+            <div class="payment-method active" id="method-bkash" onclick="selectMethod('bKash')">
+                <i class="fas fa-mobile-alt" style="font-size: 2rem; color: #E2136E;"></i>
+                <div><strong>bKash / Nagad</strong><p class="text-sm">Mobile Banking</p></div>
+            </div>
+            
+            <div class="payment-method" id="method-card" onclick="selectMethod('Card')">
+                <i class="fas fa-credit-card" style="font-size: 2rem; color: var(--primary-navy);"></i>
+                <div><strong>Credit / Debit Card</strong><p class="text-sm">Visa, MasterCard</p></div>
+            </div>
+
+            <form id="payment-form" style="margin-top: 2rem;" onsubmit="processPayment(event)">
+                <div style="margin-bottom: 1rem;">
+                    <label style="display:block; margin-bottom:0.5rem; font-weight:bold;">Account / Card Number</label>
+                    <input type="text" required placeholder="01XXXXXXXXX" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid var(--border-color);">
+                </div>
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display:block; margin-bottom:0.5rem; font-weight:bold;">Amount (৳)</label>
+                    <input type="number" id="pay-amount" required placeholder="Enter amount to pay" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid var(--border-color);">
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; font-size: 1.1rem;"><i class="fas fa-lock"></i> Pay Securely</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const token = localStorage.getItem('annexlink_token');
+        const urlParams = new URLSearchParams(window.location.search);
+        const postId = urlParams.get('postId');
+        let selectedMethod = 'bKash';
+
+        if (!token || !postId) window.location.href = "feed.html";
+
+        // Fetch Post Details
+        async function loadOrder() {
+            const res = await fetch(`http://localhost:8000/api/posts/${postId}`, { headers: {'Authorization': `Bearer ${token}`} });
+            if (res.ok) {
+                const post = await res.json();
+                document.getElementById('order-details').innerHTML = `
+                    <h4 style="margin-bottom:0.5rem;">${post.title}</h4>
+                    <p class="text-sm" style="margin-bottom:1.5rem;">Offered by ${post.createdBy.name}</p>
+                    <div style="display:flex; justify-content:space-between; font-weight:bold; font-size:1.2rem;">
+                        <span>Total:</span>
+                        <span style="color:var(--accent-orange);">${post.price || 'Negotiable'}</span>
+                    </div>
+                `;
+                // Auto-fill amount if price is a number
+                const priceNum = post.price ? post.price.replace(/[^0-9]/g, '') : '';
+                if(priceNum) document.getElementById('pay-amount').value = priceNum;
+            }
+        }
+
+        function selectMethod(method) {
+            selectedMethod = method;
+            document.getElementById('method-bkash').classList.remove('active');
+            document.getElementById('method-card').classList.remove('active');
+            document.getElementById(`method-${method.toLowerCase()}`).classList.add('active');
+        }
+
+        async function processPayment(e) {
+            e.preventDefault();
+            const amount = document.getElementById('pay-amount').value;
+
+            const res = await fetch('http://localhost:8000/api/payments', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                body: JSON.stringify({ postId, amount, paymentMethod: selectedMethod })
+            });
+
+            if (res.ok) {
+                const data = await res.json();
+                window.location.href = `receipt.html?txnId=${data.transaction._id}`;
+            } else {
+                alert("Payment failed.");
+            }
+        }
+        loadOrder();
+    </script>
+</body>
+</html>

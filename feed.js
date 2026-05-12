@@ -249,7 +249,7 @@ function renderFeed(posts) {
                     
                     <!-- Apply/Hire Button -->
                     ${post.createdBy._id !== currentUser._id ? 
-                        `<button class="btn btn-primary">${config.primaryBtn}</button>` 
+                        `<button class="btn btn-primary" onclick="window.location.href='checkout.html?postId=${post._id}'">${config.primaryBtn}</button>` 
                         : ''}
 
                     <!-- Delete Button (ONLY shows if you own the post) -->
