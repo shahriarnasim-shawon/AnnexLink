@@ -1,6 +1,18 @@
 const token = localStorage.getItem('annexlink_token');
 if (!token) window.location.href = "index.html";
 
+// Load Navbar Avatar instantly
+const currentUserStr = localStorage.getItem('annexlink_user');
+if (currentUserStr) {
+    const currentUser = JSON.parse(currentUserStr);
+    const avatarUrl = (!currentUser.avatar || currentUser.avatar === "default-avatar.png") 
+        ? `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.name)}&background=0A192F&color=fff` 
+        : (currentUser.avatar.startsWith('http') ? currentUser.avatar : `http://localhost:8000${currentUser.avatar}`);
+    
+    const navAvatar = document.querySelector('.nav-right .avatar');
+    if (navAvatar) navAvatar.src = avatarUrl;
+}
+
 // Determine which page we are currently on
 const isMyServicesPage = window.location.pathname.includes('my-services.html');
 const isMyRequestsPage = window.location.pathname.includes('my-requests.html');
@@ -54,7 +66,6 @@ async function deleteMyPost(postId) {
 }
 
 function renderManageCards(posts, pageType) {
-    // Both pages use the class 'management-content' for their main container
     const mainContent = document.querySelector('.management-content');
     
     // Keep the header, remove the hardcoded cards

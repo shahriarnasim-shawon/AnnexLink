@@ -1,20 +1,24 @@
 const token = localStorage.getItem('annexlink_token');
-const currentUser = JSON.parse(localStorage.getItem('annexlink_user'));
+const currentUserStr = localStorage.getItem('annexlink_user');
 
-if (!token) window.location.href = "index.html";
+if (!token || !currentUserStr) window.location.href = "index.html";
+
+const currentUser = JSON.parse(currentUserStr);
 
 document.addEventListener('DOMContentLoaded', async () => {
-    // Set greeting and avatars
-    document.getElementById('dash-greeting').innerText = `Welcome back, ${currentUser.name.split(' ')[0]}! 👋`;
+    // 1. Set greeting
+    const greetingEl = document.getElementById('dash-greeting');
+    if (greetingEl) greetingEl.innerText = `Welcome back, ${currentUser.name.split(' ')[0]}! 👋`;
     
+    // 2. Set Top-Right Navbar Avatar
     const avatarUrl = (!currentUser.avatar || currentUser.avatar === "default-avatar.png") 
-        ? `https://ui-avatars.com/api/?name=${currentUser.name}&background=0A192F&color=fff` 
+        ? `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.name)}&background=0A192F&color=fff` 
         : (currentUser.avatar.startsWith('http') ? currentUser.avatar : `http://localhost:8000${currentUser.avatar}`);
     
     const navAvatar = document.querySelector('.nav-right .avatar');
     if (navAvatar) navAvatar.src = avatarUrl;
 
-    // Fetch Dashboard Data
+    // 3. Fetch Real Dashboard Data
     try {
         const response = await fetch('http://localhost:8000/api/users/dashboard', {
             headers: { 'Authorization': `Bearer ${token}` }
@@ -23,16 +27,22 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (response.ok) {
             const data = await response.json();
             
-            // 1. Update Stats
-            document.getElementById('dash-services').innerText = data.activeServices;
-            document.getElementById('dash-requests').innerText = data.pendingRequests;
-            document.getElementById('dash-earned').innerText = `৳ ${data.earned}`;
+            // Update Number Stats
+            const servicesEl = document.getElementById('dash-services');
+            const requestsEl = document.getElementById('dash-requests');
+            const earnedEl = document.getElementById('dash-earned');
 
-            // 2. Update Table
+            if (servicesEl) servicesEl.innerText = data.activeServices || 0;
+            if (requestsEl) requestsEl.innerText = data.pendingRequests || 0;
+            if (earnedEl) earnedEl.innerText = `৳ ${data.earned || 0}`;
+
+            // Update Activity Table
             const tbody = document.getElementById('dash-activity-table');
+            if (!tbody) return;
+            
             tbody.innerHTML = '';
 
-            if (data.recentActivity.length === 0) {
+            if (!data.recentActivity || data.recentActivity.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">No recent activity found.</td></tr>';
                 return;
             }

@@ -1,5 +1,6 @@
 const User = require('../models/User');
 const Review = require('../models/Review');
+const Transaction = require('../models/Transaction');
 
 // @desc    Get logged in user profile
 // @route   GET /api/users/profile
@@ -162,6 +163,9 @@ const getUserById = async (req, res) => {
 // @desc    Get user dashboard stats
 // @route   GET /api/users/dashboard
 // @access  Private
+// @desc    Get user dashboard stats (with REAL earnings)
+// @route   GET /api/users/dashboard
+// @access  Private
 const getUserDashboard = async (req, res) => {
     try {
         const Post = require('../models/Post');
@@ -173,15 +177,16 @@ const getUserDashboard = async (req, res) => {
         const activeServices = myPosts.filter(p => p.type === 'Service' && p.status === 'Active').length;
         const pendingRequests = myPosts.filter(p => (p.type === 'Request' || p.type === 'Hiring') && p.status === 'Active').length;
 
-        // Mock earning calculation (we will replace this with real Payment data later)
-        const earned = req.user.rating * 1500; 
+        // --- NEW: Calculate Real Earnings ---
+        const mySales = await Transaction.find({ seller: req.user._id, status: 'Completed' });
+        const earned = mySales.reduce((total, txn) => total + txn.amount, 0);
 
         // Send back stats and the 5 most recent activities
         res.json({
             activeServices,
             pendingRequests,
-            earned: earned.toFixed(0),
-            recentActivity: myPosts.slice(0, 5) // Only top 5
+            earned: earned.toFixed(2), // Formats to 2 decimal places if needed
+            recentActivity: myPosts.slice(0, 5) 
         });
     } catch (error) {
         res.status(500).json({ message: error.message });
