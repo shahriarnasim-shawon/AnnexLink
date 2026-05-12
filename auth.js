@@ -7,7 +7,6 @@ function toggleAuth(type) {
     const tabRegister = document.getElementById('tab-register');
     const tabAdmin = document.getElementById('tab-admin');
 
-    // Hide all forms and remove active class
     [loginForm, registerForm, adminForm].forEach(f => f.classList.add('hidden'));
     [tabLogin, tabRegister, tabAdmin].forEach(t => {
         t.classList.remove('active');

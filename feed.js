@@ -126,7 +126,6 @@ async function fetchFeed() {
             const posts = await response.json();
             renderFeed(posts);
         } else if (response.status === 401) {
-            // Token expired or invalid, log them out
             logout();
         }
     } catch (error) {

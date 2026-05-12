@@ -1,7 +1,5 @@
 const themeToggle = document.getElementById('theme-toggle');
 const body = document.body;
-
-// Check local storage for theme preference
 const currentTheme = localStorage.getItem('annexlink_theme');
 if (currentTheme === 'dark') {
     body.classList.add('dark-mode');
@@ -21,3 +19,4 @@ if (themeToggle) {
         }
     });
 }
+
