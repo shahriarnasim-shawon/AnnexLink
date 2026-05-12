@@ -9,12 +9,13 @@ if (!token || !currentUser || currentUser.role !== 'admin') {
 
 // Load correct data based on which admin page we are on
 document.addEventListener('DOMContentLoaded', () => {
-    if (document.getElementById('admin-total-users')) {
-        loadAdminDashboard();
-    }
-    if (document.getElementById('admin-users-table')) {
-        loadAdminUsers();
-    }
+    if (document.getElementById('admin-total-users')) loadAdminDashboard();
+    if (document.getElementById('admin-users-table')) loadAdminUsers();
+    
+    // THIS LINE WAS MISSING BEFORE! It triggers the reports table:
+    if (document.getElementById('admin-reports-table')) loadAdminReports(); 
+    
+    if (document.getElementById('admin-settings-form')) loadAdminSettings();
 });
 
 // --- LOAD ADMIN DASHBOARD STATS ---
@@ -35,40 +36,43 @@ async function loadAdminDashboard() {
 }
 
 // --- LOAD USERS TABLE ---
-async function loadAdminUsers() {
+// --- DYNAMIC REPORTS ---
+async function loadAdminReports() {
     try {
-        const response = await fetch('http://localhost:8000/api/admin/users', {
+        const response = await fetch('http://localhost:8000/api/admin/reports', {
             headers: { 'Authorization': `Bearer ${token}` }
         });
+        
         if (response.ok) {
-            const users = await response.json();
-            const tbody = document.getElementById('admin-users-table');
+            const reports = await response.json();
+            const tbody = document.getElementById('admin-reports-table');
             tbody.innerHTML = '';
 
-            users.forEach(user => {
-                const avatar = user.avatar.startsWith('http') ? user.avatar : (user.avatar === 'default-avatar.png' ? `https://ui-avatars.com/api/?name=${user.name}` : `http://localhost:8000${user.avatar}`);
-                const statusClass = user.status === 'Active' ? 'status-active' : (user.status === 'Banned' ? 'status-banned' : 'status-reported');
-                const banIcon = user.status === 'Banned' ? 'fa-undo' : 'fa-ban';
-                const banTitle = user.status === 'Banned' ? 'Unban User' : 'Ban User';
+            if (reports.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">No pending reports!</td></tr>';
+                return;
+            }
+
+            reports.forEach(report => {
+                // Safety check: If user was deleted AFTER being reported
+                const reportedName = report.reportedUser ? report.reportedUser.name : "Deleted User";
+                const reportedEmail = report.reportedUser ? report.reportedUser.email : "N/A";
+                const reporterEmail = report.reporter ? report.reporter.email : "Deleted User";
+                const reportedId = report.reportedUser ? report.reportedUser._id : null;
 
                 tbody.innerHTML += `
                     <tr>
                         <td>
-                            <div class="user-cell">
-                                <img src="${avatar}" alt="User">
-                                <div>
-                                    <h4>${user.name} <span class="text-sm">(${user.role})</span></h4>
-                                    <p>${user.email}</p>
-                                </div>
-                            </div>
+                            <strong>User: ${reportedName}</strong>
+                            <p class="text-sm">${reportedEmail}</p>
                         </td>
-                        <td>${user.department} (Batch ${user.batch})</td>
-                        <td><span class="status-badge ${statusClass}">${user.status}</span></td>
+                        <td><span class="status-badge status-reported" style="background:rgba(230, 57, 70, 0.15); color:#E63946;">${report.reason}</span></td>
+                        <td>${reporterEmail}</td>
                         <td>
                             <div class="admin-actions">
-                                <button class="btn-small btn-view" title="View Profile" onclick="window.location.href='user-profile.html?id=${user._id}'"><i class="fas fa-eye"></i></button>
-                                ${user.role !== 'admin' ? `<button class="btn-small btn-ban" title="${banTitle}" onclick="toggleBan('${user._id}')"><i class="fas ${banIcon}"></i></button>` : ''}
-                                ${user.role !== 'admin' ? `<button class="btn-small btn-delete" title="Delete User" onclick="deleteUser('${user._id}')"><i class="fas fa-trash"></i></button>` : ''}
+                                ${reportedId ? `<button class="btn-small btn-view" title="Review Profile" onclick="window.location.href='user-profile.html?id=${reportedId}'"><i class="fas fa-eye"></i></button>` : ''}
+                                ${reportedId ? `<button class="btn-small btn-ban" title="Ban User" onclick="toggleBan('${reportedId}')"><i class="fas fa-ban"></i></button>` : ''}
+                                <button class="btn-small" style="background: var(--text-muted); color:white;" onclick="dismissReport('${report._id}')" title="Dismiss">Dismiss</button>
                             </div>
                         </td>
                     </tr>
@@ -76,8 +80,33 @@ async function loadAdminUsers() {
             });
         }
     } catch (error) {
-        console.error("Error loading users:", error);
+        console.error("Error loading reports:", error);
     }
+}
+
+// --- DOWNLOAD PDF REPORT FUNCTION ---
+function downloadAdminReport() {
+    // Select the main content area to turn into a PDF
+    const element = document.querySelector('.admin-content');
+    
+    // Temporarily hide the download button itself so it doesn't show up in the printed PDF
+    const downloadBtn = document.querySelector('.admin-header button');
+    downloadBtn.style.display = 'none';
+
+    // Configure PDF Options
+    const opt = {
+        margin:       0.5,
+        filename:     'AnnexLink_Platform_Report.pdf',
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2 },
+        jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+    };
+
+    // Generate and save the PDF!
+    html2pdf().set(opt).from(element).save().then(() => {
+        // Show the button again after download is complete
+        downloadBtn.style.display = 'block';
+    });
 }
 
 // --- BAN / UNBAN USER ---
@@ -201,6 +230,24 @@ async function saveAdminSettings() {
         body: JSON.stringify({ platformName, supportEmail, maintenanceMode, requireEmailVerification })
     });
     alert("Settings Saved Successfully!");
+}
+// --- ADD ADMIN ---
+async function makeAdmin() {
+    const email = prompt("Enter the @student.bup.edu.bd email of the user to promote:");
+    if (!email) return;
+
+    try {
+        const response = await fetch('http://localhost:8000/api/admin/users/make-admin', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+            body: JSON.stringify({ email: email.trim() })
+        });
+        const data = await response.json();
+        alert(data.message);
+        if (response.ok) loadAdminUsers(); // Reload table to show new Admin
+    } catch (error) {
+        console.error(error);
+    }
 }
 
 // Make sure your save button in admin-settings.html calls saveAdminSettings()!

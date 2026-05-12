@@ -143,13 +143,17 @@ const getUserById = async (req, res) => {
         const user = await User.findById(req.params.id).select('-password');
         if (!user) return res.status(404).json({ message: 'User not found' });
 
-        // Fetch all reviews left for this user
         const Review = require('../models/Review');
         const reviews = await Review.find({ reviewee: req.params.id })
             .populate('reviewer', 'name avatar')
             .sort({ createdAt: -1 });
 
-        res.json({ user, reviews });
+        // NEW: Fetch their posts!
+        const Post = require('../models/Post');
+        const posts = await Post.find({ createdBy: req.params.id, status: 'Active' })
+            .sort({ createdAt: -1 });
+
+        res.json({ user, reviews, posts }); // Return posts too
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

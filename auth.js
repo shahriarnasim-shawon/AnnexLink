@@ -1,20 +1,31 @@
-// Function to toggle between Login and Register forms
 function toggleAuth(type) {
     const loginForm = document.getElementById('form-login');
     const registerForm = document.getElementById('form-register');
+    const adminForm = document.getElementById('form-admin');
+    
     const tabLogin = document.getElementById('tab-login');
     const tabRegister = document.getElementById('tab-register');
+    const tabAdmin = document.getElementById('tab-admin');
+
+    // Hide all forms and remove active class
+    [loginForm, registerForm, adminForm].forEach(f => f.classList.add('hidden'));
+    [tabLogin, tabRegister, tabAdmin].forEach(t => {
+        t.classList.remove('active');
+        t.style.borderBottom = "none";
+    });
 
     if (type === 'login') {
         loginForm.classList.remove('hidden');
-        registerForm.classList.add('hidden');
         tabLogin.classList.add('active');
-        tabRegister.classList.remove('active');
-    } else {
-        loginForm.classList.add('hidden');
+        tabLogin.style.borderBottom = "3px solid var(--accent-teal)";
+    } else if (type === 'register') {
         registerForm.classList.remove('hidden');
-        tabLogin.classList.remove('active');
         tabRegister.classList.add('active');
+        tabRegister.style.borderBottom = "3px solid var(--accent-teal)";
+    } else if (type === 'admin') {
+        adminForm.classList.remove('hidden');
+        tabAdmin.classList.add('active');
+        tabAdmin.style.borderBottom = "3px solid #E63946";
     }
 }
 

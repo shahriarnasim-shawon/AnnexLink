@@ -4,6 +4,7 @@ const Review = require('../models/Review');
 const Report = require('../models/Report');
 const Setting = require('../models/Setting');
 
+
 // @desc    Get platform statistics
 // @route   GET /api/admin/stats
 // @access  Private/Admin
@@ -140,5 +141,50 @@ const deleteUser = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+// @desc    Make a user Admin
+// @route   PUT /api/admin/users/make-admin
+// @access  Private/Admin
+const makeAdmin = async (req, res) => {
+    try {
+        const { email } = req.body;
 
-module.exports = { getPlatformStats, getAllUsers, toggleBanUser, deleteUser, getReports, dismissReport, getSettings, updateSettings };
+        const user = await User.findOne({ email });
+
+        if (!user) {
+            return res.status(404).json({
+                message: "User not found with this email"
+            });
+        }
+
+        if (user.role === 'admin') {
+            return res.status(400).json({
+                message: "User is already an Admin"
+            });
+        }
+
+        user.role = 'admin';
+
+        await user.save();
+
+        res.json({
+            message: `${user.name} has been promoted to Admin!`
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        });
+    }
+};
+
+module.exports = {
+    getPlatformStats,
+    getAllUsers,
+    toggleBanUser,
+    deleteUser,
+    getReports,
+    dismissReport,
+    getSettings,
+    updateSettings,
+    makeAdmin
+};

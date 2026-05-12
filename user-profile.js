@@ -32,6 +32,7 @@ async function loadPublicProfile() {
         if (response.ok) {
             const data = await response.json();
             renderPublicProfile(data.user);
+             renderPublicPosts(data.posts);
             renderReviews(data.reviews);
         } else {
             alert("User not found!");
@@ -163,4 +164,27 @@ async function submitReport() {
     } catch (error) {
         console.error(error);
     }
+}
+function renderPublicPosts(posts) {
+    const list = document.getElementById('public-posts-list');
+    list.innerHTML = '';
+
+    if (posts.length === 0) {
+        list.innerHTML = '<p style="text-align:center; color:gray;">This user has no active posts.</p>';
+        return;
+    }
+
+    posts.forEach(post => {
+        const typeColor = post.type === 'Service' ? 'var(--accent-teal)' : 'var(--accent-orange)';
+        list.innerHTML += `
+            <div class="card" style="border-left: 4px solid ${typeColor}; padding: 1rem;">
+                <div style="display:flex; justify-content:space-between; margin-bottom: 0.5rem;">
+                    <h4 style="color:var(--primary-navy);">${post.title}</h4>
+                    <span class="status-badge" style="background: rgba(32, 178, 170, 0.1); color: ${typeColor};">${post.type}</span>
+                </div>
+                <p class="text-sm" style="margin-bottom: 0.5rem;">${post.description}</p>
+                <strong>${post.price || 'Negotiable'}</strong>
+            </div>
+        `;
+    });
 }

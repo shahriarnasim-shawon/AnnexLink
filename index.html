@@ -3,28 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AnnexLink | Login</title>
-    <!--ekhane favicon addd korbo logo bananor pore -->
+    <title>AnnexLink | Login & Registration</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
     <div class="auth-wrapper">
         <div class="auth-card">
-            <!-- We will replace this text with the logo image later -->
             <h1 class="logo-text">Annex<span>Link</span></h1>
             <p>Peer-to-peer service marketplace for BUP students.</p>
             
+            <!-- Auth Tabs -->
             <div class="auth-tabs">
-                <button class="auth-tab active" id="tab-login" onclick="toggleAuth('login')">Login</button>
+                <button class="auth-tab active" id="tab-login" onclick="toggleAuth('login')" style="border-bottom: 3px solid var(--accent-teal);">Login</button>
                 <button class="auth-tab" id="tab-register" onclick="toggleAuth('register')">Register</button>
+                <button class="auth-tab" id="tab-admin" onclick="toggleAuth('admin')" style="color:#E63946;">Admin</button>
             </div>
 
             <!-- Login Form -->
             <form id="form-login" class="auth-form" onsubmit="handleLogin(event)">
                 <div>
                     <label>University Email</label>
-                    <input type="email" placeholder="name@student.bup.edu.bd" required pattern=".+@student\.bup\.edu\.bd" title="Please use your @student.bup.edu.bd email">
+                    <input type="email" placeholder="name@student.bup.edu.bd" required>
                 </div>
                 <div>
                     <label>Password</label>
@@ -41,7 +42,7 @@
                 </div>
                 <div>
                     <label>University Email</label>
-                    <input type="email" placeholder="name@student.bup.edu.bd" required pattern=".+@student\.bup\.edu\.bd" title="Please use your @student.bup.edu.bd email">
+                    <input type="email" placeholder="name@student.bup.edu.bd" required>
                 </div>
                 <div class="input-row">
                     <div>
@@ -58,14 +59,30 @@
                     <input type="text" placeholder="e.g. Design, Python, Writing">
                 </div>
                 <div>
-                    <label>Password</label>
-                    <input type="password" placeholder="Create a password" required>
+                    <label>Password (Min 8 chars, 1 letter, 1 number)</label>
+                    <input type="password" placeholder="Create a strong password" required>
                 </div>
                 <button type="submit" class="btn btn-primary">Create Account</button>
             </form>
+
+            <!-- Admin Login Form -->
+            <form id="form-admin" class="auth-form hidden" onsubmit="handleLogin(event)">
+                <h3 style="color: #E63946; text-align: center; margin-bottom: 1rem;"><i class="fas fa-shield-alt"></i> Admin Portal</h3>
+                <div>
+                    <label>Admin Email</label>
+                    <input type="email" placeholder="admin@student.bup.edu.bd" required>
+                </div>
+                <div>
+                    <label>Admin Password</label>
+                    <input type="password" placeholder="Enter password" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="background: #E63946;">Login as Admin</button>
+            </form>
+
         </div>
     </div>
 
+    <!-- Script connection -->
     <script src="auth.js"></script>
 </body>
 </html>
