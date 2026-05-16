@@ -5,13 +5,19 @@ const Transaction = require('../models/Transaction');
 // @desc    Get logged in user profile
 // @route   GET /api/users/profile
 // @access  Private
+// @desc    Get logged in user profile (Now includes Reviews and Saved Posts)
+// @route   GET /api/users/profile
 const getUserProfile = async (req, res) => {
     try {
-        // req.user comes from our protect middleware
-        const user = await User.findById(req.user._id);
+        const user = await User.findById(req.user._id).populate({
+            path: 'savedPosts',
+            populate: { path: 'createdBy', select: 'name avatar rating' }
+        });
 
         if (user) {
-            res.json(user);
+            const Review = require('../models/Review');
+            const reviews = await Review.find({ reviewee: req.user._id }).populate('reviewer', 'name avatar').sort({ createdAt: -1 });
+            res.json({ user, reviews });
         } else {
             res.status(404).json({ message: 'User not found' });
         }
@@ -239,9 +245,30 @@ const reportUser = async (req, res) => {
     }
 };
 
-// Update exports to include reportUser!
-module.exports = { getUserProfile, updateUserProfile, addReview, getUsersForChat, getTopUsers, getUserById, getUserDashboard, deleteOwnAccount, reportUser };
+// @desc    Toggle Save/Unsave Post
+// @route   PUT /api/users/save-post/:postId
+// @access  Private
+const toggleSavePost = async (req, res) => {
+    try {
+        const user = await User.findById(req.user._id);
+        const postId = req.params.postId;
 
+        if (user.savedPosts.includes(postId)) {
+            user.savedPosts = user.savedPosts.filter(id => id.toString() !== postId); // Unsave
+        } else {
+            user.savedPosts.push(postId); // Save
+        }
+        await user.save();
+        res.json({ message: 'Saved posts updated', savedPosts: user.savedPosts });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+
+
+// Update exports to include reportUser!
+module.exports = { getUserProfile, updateUserProfile, addReview, getUsersForChat, getTopUsers, getUserById, getUserDashboard, deleteOwnAccount, reportUser, toggleSavePost };
 
 
 

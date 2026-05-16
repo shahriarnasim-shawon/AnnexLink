@@ -176,14 +176,34 @@ function renderPublicPosts(posts) {
 
     posts.forEach(post => {
         const typeColor = post.type === 'Service' ? 'var(--accent-teal)' : 'var(--accent-orange)';
+        const tagsHTML = post.tags.map(tag => `<span class="tag">${tag}</span>`).join('');
+        
+        let mediaHTML = '';
+        if (post.media) {
+            const cleanPath = post.media.replace(/\\/g, '/');
+            const mediaUrl = cleanPath.startsWith('/') ? `http://localhost:8000${cleanPath}` : `http://localhost:8000/${cleanPath}`;
+            const isVideo = ['.mp4', '.webm', '.mov'].some(ext => mediaUrl.toLowerCase().endsWith(ext));
+            mediaHTML = isVideo 
+                ? `<video controls style="width: 100%; max-height: 300px; border-radius: 8px; margin-bottom: 1rem;"><source src="${mediaUrl}" type="video/mp4"></video>`
+                : `<img src="${mediaUrl}" style="width: 100%; max-height: 300px; object-fit: cover; border-radius: 8px; margin-bottom: 1rem;">`;
+        }
+
         list.innerHTML += `
-            <div class="card" style="border-left: 4px solid ${typeColor}; padding: 1rem;">
-                <div style="display:flex; justify-content:space-between; margin-bottom: 0.5rem;">
-                    <h4 style="color:var(--primary-navy);">${post.title}</h4>
+            <div class="card" style="margin-bottom: 1.5rem; border: 1px solid var(--border-color);">
+                <div style="display:flex; justify-content:space-between; margin-bottom: 1rem;">
+                    <h3 style="color:var(--primary-navy); margin-bottom: 0;">${post.title}</h3>
                     <span class="status-badge" style="background: rgba(32, 178, 170, 0.1); color: ${typeColor};">${post.type}</span>
                 </div>
-                <p class="text-sm" style="margin-bottom: 0.5rem;">${post.description}</p>
-                <strong>${post.price || 'Negotiable'}</strong>
+                <p style="margin-bottom: 1rem; color: var(--text-muted);">${post.description}</p>
+                ${mediaHTML}
+                <div class="tags">${tagsHTML}</div>
+                
+                <div class="post-footer" style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); padding-top: 1rem; margin-top: 1rem;">
+                    <div style="font-weight: bold; color: var(--accent-orange); font-size: 1.2rem;">${post.price || 'Negotiable'}</div>
+                    <div class="post-actions" style="display: flex; gap: 0.8rem;">
+                        <button class="btn btn-primary" onclick="window.location.href='checkout.html?postId=${post._id}'">Hire Now</button>
+                    </div>
+                </div>
             </div>
         `;
     });

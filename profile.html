@@ -29,8 +29,16 @@
             </div>
             
             <!-- Notifications Wrapper -->
-            <!-- ... rest of your nav-right ... -->
-            <div class="icon-btn"><i class="fas fa-bell"></i><span class="badge">3</span></div>
+            <div class="notification-wrapper">
+                <div class="icon-btn" id="notif-bell" onclick="toggleNotifications()">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge" id="notif-badge" style="display: none;">0</span>
+                </div>
+                <div class="notification-dropdown" id="notif-dropdown">
+                    <div class="notif-header"><h3>Notifications</h3></div>
+                    <div class="notif-list" id="notif-list"></div>
+                </div>
+            </div>
             <div class="icon-btn" onclick="window.location.href='chat.html'"><i class="fas fa-envelope"></i></div><span class="badge">1</span></div>
             <img src="https://scontent.fdac1-1.fna.fbcdn.net/v/t39.30808-6/516934099_4146456082346221_103794666320343105_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=53a332&_nc_eui2=AeH8zoOp4RbkY_r1kljCPeJoXqJObffAZw1eok5t98BnDZjEHMPY3DYKqZkvlXZssntr_B5E0ESJ0WJN5n1zwXwU&_nc_ohc=8U_Gxz15DnsQ7kNvwF9qQiS&_nc_oc=AdpdYDztk-ctnvr0nF_jf2R2W2umo2CaAHniFRCWq39PganvnATqxtRMo7EtKOu-oU0&_nc_zt=23&_nc_ht=scontent.fdac1-1.fna&_nc_gid=Km9RWMNbVoG35CpQ2MHtog&_nc_ss=7a3a8&oh=00_AfztY7GENBR2QFKM2H3i80rICT69Litkr_-Q1kYLOwEh8w&oe=69D062FF" alt="Profile" class="avatar">
         </div>
@@ -100,28 +108,9 @@
             </div>
 
             <!-- Reviews Section -->
-            <h3 class="section-title">Recent Reviews</h3>
-            
-            <div class="review-card">
-                <div class="review-header">
-                    <div class="user-info">
-                        <img src="https://ui-avatars.com/api/?name=Ayesha+Siddiqa&background=20B2AA&color=fff" class="avatar" style="width: 30px; height: 30px;">
-                        <h4>Ayesha Siddiqa</h4>
-                    </div>
-                    <span style="color: var(--accent-orange);">⭐⭐⭐⭐⭐</span>
-                </div>
-                <p class="post-desc" style="margin-bottom: 0;">"You did an amazing job on our web project! Delivered exactly what we needed before the deadline. Highly recommended!"</p>
-            </div>
-
-            <div class="review-card">
-                <div class="review-header">
-                    <div class="user-info">
-                        <img src="https://ui-avatars.com/api/?name=Fahim+Rahman&background=FF8C00&color=fff" class="avatar" style="width: 30px; height: 30px;">
-                        <h4>Fahim Rahman</h4>
-                    </div>
-                    <span style="color: var(--accent-orange);">⭐⭐⭐⭐</span>
-                </div>
-                <p class="post-desc" style="margin-bottom: 0;">"Great communication and solid coding skills. Helped me fix a major bug in my React app."</p>
+            <h3 class="section-title">My Reviews</h3>
+            <div id="my-reviews-list">
+                <p style="text-align:center; color:gray;">Loading reviews...</p>
             </div>
 
         </main>
@@ -130,6 +119,6 @@
     <script src="profile.js"></script>
     <script src="search.js"></script>
     <script src="theme.js"></script>
-
+    <script src="notifications.js"></script>
 </body>
 </html>

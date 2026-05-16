@@ -18,7 +18,8 @@ const userSchema = new mongoose.Schema({
     rating: { type: Number, default: 0 },
     numReviews: { type: Number, default: 0 },
     role: { type: String, enum:['student', 'admin'], default: 'student' },
-    status: { type: String, enum:['Active', 'Banned', 'Reported'], default: 'Active' }
+    status: { type: String, enum:['Active', 'Banned', 'Reported'], default: 'Active' },
+    savedPosts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }]
 }, { timestamps: true });
 
 // Encrypt password before saving

@@ -64,6 +64,15 @@
                 </div>
             </div>
 
+
+            <!-- Saved Posts -->
+            <div class="manage-card" style="border-left-color: var(--primary-navy);">
+                <h3 style="color: var(--primary-navy);">Saved Posts</h3>
+                <div id="saved-posts-list" style="margin-top: 1rem; display: flex; flex-direction: column; gap: 1rem;">
+                    <p class="text-sm">Loading saved posts...</p>
+                </div>
+            </div>
+
             <!-- Danger Zone -->
             <div class="manage-card" style="border-left-color: #E63946;">
                 <h3 style="color: #E63946;">Danger Zone</h3>
@@ -109,6 +118,39 @@
             localStorage.clear();
             window.location.href = "index.html";
         });
+
+        async function loadSavedPosts() {
+            try {
+                const res = await fetch('http://localhost:8000/api/users/profile', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    const savedList = document.getElementById('saved-posts-list');
+                    savedList.innerHTML = '';
+                    
+                    if (!data.user.savedPosts || data.user.savedPosts.length === 0) {
+                        savedList.innerHTML = '<p class="text-sm">You have no saved posts.</p>';
+                        return;
+                    }
+
+                    data.user.savedPosts.forEach(post => {
+                        savedList.innerHTML += `
+                            <div style="padding: 1rem; border: 1px solid var(--border-color); border-radius: 8px; display:flex; justify-content:space-between; align-items:center;">
+                                <div>
+                                    <strong style="color:var(--primary-navy); display:block; margin-bottom:0.3rem;">${post.title}</strong>
+                                    <span class="text-sm">${post.type} • ${post.price || 'Negotiable'}</span>
+                                </div>
+                                <button class="btn btn-outline" onclick="window.location.href='checkout.html?postId=${post._id}'">View / Hire</button>
+                            </div>
+                        `;
+                    });
+                }
+            } catch (e) { console.error(e); }
+        }
+        
+        // Call it when the page loads
+        document.addEventListener('DOMContentLoaded', loadSavedPosts);
     </script>
 </body>
 </html>

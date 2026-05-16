@@ -1,12 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const { sendMessage, getMessages } = require('../controllers/messageController');
+const { sendMessage, getMessages, getConversations } = require('../controllers/messageController');
 const { protect } = require('../middleware/authMiddleware');
 
-// Route to send a message
 router.route('/').post(protect, sendMessage);
 
-// Route to get history with a specific user
+// THIS MUST BE ABOVE /:userId
+router.route('/conversations').get(protect, getConversations); 
+
 router.route('/:userId').get(protect, getMessages);
 
 module.exports = router;

@@ -55,5 +55,44 @@ const getMessages = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+// @desc    Get all conversations for the sidebar (Ordered by newest)
+// @route   GET /api/messages/conversations
+// @access  Private
+const getConversations = async (req, res) => {
+    try {
+        const myId = req.user._id;
 
-module.exports = { sendMessage, getMessages };
+        // Find all messages where I am the sender or receiver, sorted newest to oldest
+        const messages = await Message.find({
+            $or: [{ sender: myId }, { receiver: myId }]
+        })
+        .populate('sender', 'name avatar department batch')
+        .populate('receiver', 'name avatar department batch')
+        .sort({ createdAt: -1 });
+
+        const conversations = [];
+        const addedUsers = new Set(); // Keep track of users we've already added
+
+        messages.forEach(msg => {
+            // Determine who the OTHER person in the chat is
+            const otherUser = msg.sender._id.toString() === myId.toString() ? msg.receiver : msg.sender;
+
+            // If we haven't added this user to the sidebar yet, add them!
+            // Because we sorted by newest first, this guarantees we save their latest message
+            if (otherUser && !addedUsers.has(otherUser._id.toString())) {
+                addedUsers.add(otherUser._id.toString());
+                conversations.push({
+                    user: otherUser,
+                    lastMessage: msg.text,
+                    lastMessageTime: msg.createdAt
+                });
+            }
+        });
+
+        res.json(conversations);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+module.exports = { sendMessage, getMessages, getConversations };

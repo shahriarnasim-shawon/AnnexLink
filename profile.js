@@ -15,8 +15,9 @@ async function loadProfile() {
         });
 
         if (response.ok) {
-            const user = await response.json();
-            renderProfile(user);
+            const data = await response.json();
+            renderProfile(data.user);
+            renderReviews(data.reviews);
         } else {
             console.error("Failed to load profile");
             localStorage.clear();
@@ -120,5 +121,37 @@ document.getElementById('edit-profile-form').addEventListener('submit', async (e
     }
 });
 
-// Load profile on start
+
+function renderMyReviews(reviews) {
+    const list = document.getElementById('my-reviews-list');
+    list.innerHTML = '';
+
+    if (reviews.length === 0) {
+        list.innerHTML = '<p style="text-align:center; color:gray;">No reviews yet.</p>';
+        return;
+    }
+
+    reviews.forEach(review => {
+        const rName = review.reviewer ? review.reviewer.name : "Deleted User";
+        const rAvatarDb = review.reviewer ? review.reviewer.avatar : "default-avatar.png";
+        const rAvatar = (rAvatarDb === 'default-avatar.png') 
+            ? `https://ui-avatars.com/api/?name=${encodeURIComponent(rName)}` 
+            : (rAvatarDb.startsWith('http') ? rAvatarDb : `http://localhost:8000${rAvatarDb}`);
+        
+        let stars = '⭐'.repeat(review.rating);
+
+        list.innerHTML += `
+            <div class="review-card card" style="margin-bottom: 1rem;">
+                <div class="review-header" style="display:flex; justify-content:space-between;">
+                    <div style="display:flex; gap:1rem; align-items:center;">
+                        <img src="${rAvatar}" class="avatar" style="width:30px; height:30px;">
+                        <strong>${rName}</strong>
+                    </div>
+                    <span>${stars}</span>
+                </div>
+                <p style="margin-top: 0.5rem; color: var(--text-muted);">${review.comment}</p>
+            </div>
+        `;
+    });
+}
 document.addEventListener('DOMContentLoaded', loadProfile);

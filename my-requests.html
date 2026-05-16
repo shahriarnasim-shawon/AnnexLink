@@ -25,7 +25,17 @@
             
             <!-- Notifications Wrapper -->
             <!-- ... rest of your nav-right ... -->
-            <div class="icon-btn"><i class="fas fa-bell"></i><span class="badge">3</span></div>
+            <!-- Notifications Wrapper -->
+            <div class="notification-wrapper">
+                <div class="icon-btn" id="notif-bell" onclick="toggleNotifications()">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge" id="notif-badge" style="display: none;">0</span>
+                </div>
+                <div class="notification-dropdown" id="notif-dropdown">
+                    <div class="notif-header"><h3>Notifications</h3></div>
+                    <div class="notif-list" id="notif-list"></div>
+                </div>
+            </div>
             <a href="chat.html" class="icon-btn"><i class="fas fa-envelope"></i></a>
             <img src="https://ui-avatars.com/api/?name=Rakib+Hasan&background=0A192F&color=fff" alt="Profile" class="avatar">
         </div>
@@ -108,6 +118,7 @@
 
     <script src="manage.js"></script>
     <script src="theme.js"></script>
+    <script src="notifications.js"></script>
 
 </body>
 </html>
