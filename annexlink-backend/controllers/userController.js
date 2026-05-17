@@ -26,7 +26,7 @@ const getUserProfile = async (req, res) => {
     }
 };
 
-// @desc    Update user profile (bio, skills, avatar)
+// @desc    Update user profile (bio, skills, avatar, coverPhoto)
 // @route   PUT /api/users/profile
 // @access  Private
 const updateUserProfile = async (req, res) => {
@@ -44,9 +44,16 @@ const updateUserProfile = async (req, res) => {
                     : req.body.skills;
             }
 
-            // If a new avatar file was uploaded, save its path
-            if (req.file) {
-                user.avatar = `/uploads/${req.file.filename}`;
+            // --- CHECK FOR UPLOADED FILES ---
+            if (req.files) {
+                // Check if avatar was uploaded
+                if (req.files['avatar'] && req.files['avatar'][0]) {
+                    user.avatar = `/uploads/${req.files['avatar'][0].filename}`;
+                }
+                // Check if cover photo was uploaded
+                if (req.files['coverPhoto'] && req.files['coverPhoto'][0]) {
+                    user.coverPhoto = `/uploads/${req.files['coverPhoto'][0].filename}`;
+                }
             }
 
             const updatedUser = await user.save();
@@ -57,7 +64,8 @@ const updateUserProfile = async (req, res) => {
                 email: updatedUser.email,
                 bio: updatedUser.bio,
                 skills: updatedUser.skills,
-                avatar: updatedUser.avatar
+                avatar: updatedUser.avatar,
+                coverPhoto: updatedUser.coverPhoto // Send back the new cover photo
             });
         } else {
             res.status(404).json({ message: 'User not found' });

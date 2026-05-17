@@ -15,6 +15,7 @@ const userSchema = new mongoose.Schema({
     skills: [{ type: String }], // Array of tags (e.g.,["Web Design", "Python"])
     bio: { type: String, default: "" },
     avatar: { type: String, default: "default-avatar.png" },
+    coverPhoto: { type: String, default: "" },
     rating: { type: Number, default: 0 },
     numReviews: { type: Number, default: 0 },
     role: { type: String, enum:['student', 'admin'], default: 'student' },

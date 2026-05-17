@@ -10,7 +10,7 @@ router.route('/top').get(protect, getTopUsers); // MUST BE BEFORE /profile and /
 
 router.route('/profile')
     .get(protect, getUserProfile)
-    .put(protect, upload.single('avatar'), updateUserProfile)
+    .put(protect, upload.fields([{ name: 'avatar', maxCount: 1 }, { name: 'coverPhoto', maxCount: 1 }]), updateUserProfile)
     .delete(protect, deleteOwnAccount);
 
 router.route('/dashboard').get(protect, getUserDashboard);

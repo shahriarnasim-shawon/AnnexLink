@@ -68,6 +68,15 @@ function renderPublicProfile(user) {
     document.getElementById('message-user-btn').onclick = () => {
         window.location.href = `chat.html?userId=${user._id}`;
     };
+    // --- Render Cover Photo ---
+    const coverDiv = document.querySelector('.profile-cover');
+    if (user.coverPhoto && user.coverPhoto.trim() !== "") {
+        const cleanPath = user.coverPhoto.replace(/\\/g, '/');
+        const coverUrl = cleanPath.startsWith('/') ? `http://localhost:8000${cleanPath}` : `http://localhost:8000/${cleanPath}`;
+        coverDiv.style.background = `url('${coverUrl}') center/cover no-repeat`;
+    } else {
+        coverDiv.style.background = `linear-gradient(135deg, var(--primary-navy) 0%, var(--accent-teal) 100%)`;
+    }
 }
 
 function renderReviews(reviews) {

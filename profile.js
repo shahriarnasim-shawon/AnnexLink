@@ -92,6 +92,17 @@ function renderProfile(user) {
     // 5. Pre-fill the edit form with current data
     document.getElementById('edit-bio').value = user.bio || "";
     document.getElementById('edit-skills').value = user.skills ? user.skills.join(', ') : "";
+    // --- Render Cover Photo ---
+    const coverDiv = document.querySelector('.profile-cover');
+    if (user.coverPhoto && user.coverPhoto.trim() !== "") {
+        const cleanPath = user.coverPhoto.replace(/\\/g, '/');
+        const coverUrl = cleanPath.startsWith('/') ? `http://localhost:8000${cleanPath}` : `http://localhost:8000/${cleanPath}`;
+        // Set the background to the uploaded image
+        coverDiv.style.background = `url('${coverUrl}') center/cover no-repeat`;
+    } else {
+        // Fallback to the default gradient
+        coverDiv.style.background = `linear-gradient(135deg, var(--primary-navy) 0%, var(--accent-teal) 100%)`;
+    }
 }
 
 // --- Render Logged-in User's Reviews ---
@@ -158,6 +169,9 @@ if (editForm) {
         const avatarInput = document.getElementById('edit-avatar');
         const avatarFile = avatarInput ? avatarInput.files[0] : null;
 
+         const coverInput = document.getElementById('edit-cover');
+         const coverFile = coverInput ? coverInput.files[0] : null;
+
         const newSkillsArray = newSkillsString.split(',').map(s => s.trim()).filter(s => s !== "");
 
         const formData = new FormData();
@@ -165,6 +179,9 @@ if (editForm) {
         formData.append('skills', newSkillsString); // Send as string, backend parses it
         if (avatarFile) {
             formData.append('avatar', avatarFile);
+        }
+        if (coverFile) {
+            formData.append('coverPhoto', coverFile); // Append to form data
         }
 
         try {
