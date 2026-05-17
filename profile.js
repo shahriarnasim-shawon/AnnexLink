@@ -1,38 +1,70 @@
 // --- Authentication Check ---
 const token = localStorage.getItem('annexlink_token');
-if (!token) {
+const currentUserStr = localStorage.getItem('annexlink_user');
+
+if (!token || !currentUserStr) {
     window.location.href = "index.html";
 }
 
-// --- Load Profile Data ---
+const currentUser = JSON.parse(currentUserStr);
+
+// Load Navbar Avatar instantly
+document.addEventListener('DOMContentLoaded', () => {
+    const avatarUrl = (!currentUser.avatar || currentUser.avatar === "default-avatar.png") 
+        ? `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.name)}&background=0A192F&color=fff` 
+        : (currentUser.avatar.startsWith('http') ? currentUser.avatar : `http://localhost:8000${currentUser.avatar}`);
+    
+    const navAvatar = document.querySelector('.nav-right .avatar');
+    if (navAvatar) navAvatar.src = avatarUrl;
+
+    loadProfile();
+});
+
+// --- Load Profile Data & Reviews ---
 async function loadProfile() {
     try {
         const response = await fetch('http://localhost:8000/api/users/profile', {
             method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
+            headers: { 'Authorization': `Bearer ${token}` }
         });
 
         if (response.ok) {
             const data = await response.json();
             renderProfile(data.user);
-            renderReviews(data.reviews);
+            renderMyReviews(data.reviews); 
+            fetchMyActivePostsCount(); // Fetch active posts for the 3rd stat block!
         } else {
             console.error("Failed to load profile");
-            localStorage.clear();
-            window.location.href = "index.html";
         }
     } catch (error) {
         console.error("Error fetching profile:", error);
     }
 }
 
+// --- Fetch Active Posts Count ---
+async function fetchMyActivePostsCount() {
+    try {
+        const response = await fetch('http://localhost:8000/api/posts/mine', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (response.ok) {
+            const myPosts = await response.json();
+            const activeCount = myPosts.filter(p => p.status === 'Active').length;
+            const servicesEl = document.getElementById('profile-services');
+            if (servicesEl) servicesEl.innerText = activeCount;
+        }
+    } catch (error) { console.error(error); }
+}
+
 // --- Render Profile to the Screen ---
 function renderProfile(user) {
-    // 1. Set text fields
-    document.getElementById('profile-name').innerText = user.name;
-    document.getElementById('profile-meta').innerText = `${user.department} • Batch ${user.batch} • ${user.email}`;
+    // 1. Set text fields with Safety Fallbacks ('N/A' if missing)
+    document.getElementById('profile-name').innerText = user.name || "Unknown User";
+    
+    const dept = user.department || "N/A";
+    const batch = user.batch || "N/A";
+    document.getElementById('profile-meta').innerText = `${dept} • Batch ${batch} • ${user.email}`;
+    
     document.getElementById('profile-bio').innerText = user.bio || "Hello! I am a student at BUP.";
     
     // 2. Set stats
@@ -41,18 +73,14 @@ function renderProfile(user) {
     
     // 3. Set avatar
     const avatarUrl = (!user.avatar || user.avatar === "default-avatar.png") 
-        ? `https://ui-avatars.com/api/?name=${user.name}&background=0A192F&color=fff` 
+        ? `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=0A192F&color=fff` 
         : (user.avatar.startsWith('http') ? user.avatar : `http://localhost:8000${user.avatar}`);
     
     document.getElementById('profile-avatar').src = avatarUrl;
-    
-    // Set top right navbar avatar as well
-    const navAvatar = document.querySelector('.nav-right .avatar');
-    if(navAvatar) navAvatar.src = avatarUrl;
 
     // 4. Render Skills
     const skillsContainer = document.getElementById('profile-skills');
-    skillsContainer.innerHTML = ''; // Clear previous
+    skillsContainer.innerHTML = ''; 
     if (user.skills && user.skills.length > 0) {
         user.skills.forEach(skill => {
             skillsContainer.innerHTML += `<span class="tag">${skill}</span>`;
@@ -64,6 +92,44 @@ function renderProfile(user) {
     // 5. Pre-fill the edit form with current data
     document.getElementById('edit-bio').value = user.bio || "";
     document.getElementById('edit-skills').value = user.skills ? user.skills.join(', ') : "";
+}
+
+// --- Render Logged-in User's Reviews ---
+function renderMyReviews(reviews) {
+    const list = document.getElementById('my-reviews-list');
+    if (!list) return;
+    
+    list.innerHTML = '';
+
+    if (!reviews || reviews.length === 0) {
+        list.innerHTML = '<p style="text-align:center; color:gray; margin-top:1rem;">No reviews yet.</p>';
+        return;
+    }
+
+    reviews.forEach(review => {
+        const rName = review.reviewer ? review.reviewer.name : "Deleted User";
+        const rAvatarDb = review.reviewer ? review.reviewer.avatar : "default-avatar.png";
+        
+        // Safe Avatar Rendering
+        const rAvatar = (!rAvatarDb || rAvatarDb === 'default-avatar.png') 
+            ? `https://ui-avatars.com/api/?name=${encodeURIComponent(rName)}&background=20B2AA&color=fff` 
+            : (rAvatarDb.startsWith('http') ? rAvatarDb : `http://localhost:8000${rAvatarDb}`);
+        
+        let stars = '⭐'.repeat(Math.round(review.rating));
+
+        list.innerHTML += `
+            <div class="review-card card" style="margin-bottom: 1rem; text-align: left;">
+                <div class="review-header" style="display:flex; justify-content:space-between;">
+                    <div style="display:flex; gap:1rem; align-items:center;">
+                        <img src="${rAvatar}" class="avatar" style="width:30px; height:30px; object-fit:cover;">
+                        <strong style="color: var(--primary-navy);">${rName}</strong>
+                    </div>
+                    <span>${stars}</span>
+                </div>
+                <p style="margin-top: 0.5rem; color: var(--text-muted);">${review.comment}</p>
+            </div>
+        `;
+    });
 }
 
 // --- Toggle Edit Mode UI ---
@@ -81,77 +147,52 @@ function toggleEditMode() {
 }
 
 // --- Handle Save Profile Changes ---
-// --- Handle Save Profile Changes ---
-document.getElementById('edit-profile-form').addEventListener('submit', async (e) => {
-    e.preventDefault();
+const editForm = document.getElementById('edit-profile-form');
+if (editForm) {
+    editForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
 
-    const newBio = document.getElementById('edit-bio').value;
-    const newSkillsString = document.getElementById('edit-skills').value;
-    const avatarFile = document.getElementById('edit-avatar').files[0];
-
-    const formData = new FormData();
-    formData.append('bio', newBio);
-    formData.append('skills', newSkillsString);
-    if (avatarFile) {
-        formData.append('avatar', avatarFile);
-    }
-
-    try {
-        const response = await fetch('http://localhost:8000/api/users/profile', {
-            method: 'PUT',
-            headers: {
-                'Authorization': `Bearer ${token}` // NO Content-Type for FormData
-            },
-            body: formData
-        });
-
-        if (response.ok) {
-            const updatedUser = await response.json();
-            
-            // Update LocalStorage
-            localStorage.setItem('annexlink_user', JSON.stringify(updatedUser));
-
-            renderProfile(updatedUser);
-            toggleEditMode();
-        } else {
-            alert("Failed to update profile.");
-        }
-    } catch (error) {
-        console.error("Error updating profile:", error);
-    }
-});
-
-
-function renderMyReviews(reviews) {
-    const list = document.getElementById('my-reviews-list');
-    list.innerHTML = '';
-
-    if (reviews.length === 0) {
-        list.innerHTML = '<p style="text-align:center; color:gray;">No reviews yet.</p>';
-        return;
-    }
-
-    reviews.forEach(review => {
-        const rName = review.reviewer ? review.reviewer.name : "Deleted User";
-        const rAvatarDb = review.reviewer ? review.reviewer.avatar : "default-avatar.png";
-        const rAvatar = (rAvatarDb === 'default-avatar.png') 
-            ? `https://ui-avatars.com/api/?name=${encodeURIComponent(rName)}` 
-            : (rAvatarDb.startsWith('http') ? rAvatarDb : `http://localhost:8000${rAvatarDb}`);
+        const newBio = document.getElementById('edit-bio').value;
+        const newSkillsString = document.getElementById('edit-skills').value;
         
-        let stars = '⭐'.repeat(review.rating);
+        const avatarInput = document.getElementById('edit-avatar');
+        const avatarFile = avatarInput ? avatarInput.files[0] : null;
 
-        list.innerHTML += `
-            <div class="review-card card" style="margin-bottom: 1rem;">
-                <div class="review-header" style="display:flex; justify-content:space-between;">
-                    <div style="display:flex; gap:1rem; align-items:center;">
-                        <img src="${rAvatar}" class="avatar" style="width:30px; height:30px;">
-                        <strong>${rName}</strong>
-                    </div>
-                    <span>${stars}</span>
-                </div>
-                <p style="margin-top: 0.5rem; color: var(--text-muted);">${review.comment}</p>
-            </div>
-        `;
+        const newSkillsArray = newSkillsString.split(',').map(s => s.trim()).filter(s => s !== "");
+
+        const formData = new FormData();
+        formData.append('bio', newBio);
+        formData.append('skills', newSkillsString); // Send as string, backend parses it
+        if (avatarFile) {
+            formData.append('avatar', avatarFile);
+        }
+
+        try {
+            const response = await fetch('http://localhost:8000/api/users/profile', {
+                method: 'PUT',
+                headers: { 'Authorization': `Bearer ${token}` },
+                body: formData
+            });
+
+            if (response.ok) {
+                const updatedUser = await response.json();
+                
+                // Update LocalStorage user info
+                currentUser.bio = updatedUser.bio;
+                currentUser.skills = updatedUser.skills;
+                if(updatedUser.avatar) currentUser.avatar = updatedUser.avatar;
+                
+                localStorage.setItem('annexlink_user', JSON.stringify(currentUser));
+
+                // Instantly update UI and close form
+                renderProfile(updatedUser);
+                toggleEditMode();
+                
+            } else {
+                alert("Failed to update profile.");
+            }
+        } catch (error) {
+            console.error("Error updating profile:", error);
+        }
     });
 }
-document.addEventListener('DOMContentLoaded', loadProfile);
