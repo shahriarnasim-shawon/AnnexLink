@@ -347,3 +347,102 @@ body.dark-mode .nav-links li.active {
     transition: 0.3s;
 }
 .theme-switch:hover { color: var(--accent-orange); }
+
+/* --- AI Chatbot Styles --- */
+#ai-chatbot-container {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 9999;
+}
+#ai-chat-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--accent-orange);
+    color: white;
+    border: none;
+    font-size: 1.8rem;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(255, 140, 0, 0.4);
+    transition: transform 0.3s;
+}
+#ai-chat-btn:hover { transform: scale(1.1); }
+
+#ai-chat-window {
+    position: absolute;
+    bottom: 80px;
+    right: 0;
+    width: 350px;
+    background: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+#ai-chat-window.hidden { display: none; }
+
+.ai-chat-header {
+    background: var(--primary-navy);
+    color: white;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.ai-chat-body {
+    height: 350px;
+    padding: 1rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    background: var(--bg-color);
+}
+.ai-msg {
+    max-width: 80%;
+    padding: 0.8rem;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+.ai-msg.user {
+    background: var(--accent-teal);
+    color: white;
+    align-self: flex-end;
+    border-bottom-right-radius: 2px;
+}
+.ai-msg.bot {
+    background: var(--card-bg);
+    color: var(--text-main);
+    align-self: flex-start;
+    border-bottom-left-radius: 2px;
+    border: 1px solid var(--border-color);
+}
+.ai-chat-footer {
+    padding: 0.8rem;
+    background: var(--card-bg);
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    gap: 0.5rem;
+}
+.ai-chat-footer input {
+    flex: 1;
+    padding: 0.6rem;
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    outline: none;
+    background: var(--bg-color);
+    color: var(--text-main);
+}
+.ai-chat-footer button {
+    background: var(--accent-teal);
+    color: white;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+}

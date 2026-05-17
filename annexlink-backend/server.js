@@ -5,7 +5,8 @@ const connectDB = require('./config/db');
 const http = require('http'); 
 const { Server } = require('socket.io'); 
 const path = require('path');
-const searchRoutes = require('./routes/searchRoutes'); // Add at the top
+const searchRoutes = require('./routes/searchRoutes');
+const chatbotRoutes = require('./routes/chatbotRoutes');
 
 
 // Import Routes
@@ -13,9 +14,9 @@ const authRoutes = require('./routes/authRoutes');
 const postRoutes = require('./routes/postRoutes');
 const userRoutes = require('./routes/userRoutes');
 const messageRoutes = require('./routes/messageRoutes'); 
-const adminRoutes = require('./routes/adminRoutes'); // From Step 8
+const adminRoutes = require('./routes/adminRoutes'); 
 const notificationRoutes = require('./routes/notificationRoutes');
-const paymentRoutes = require('./routes/paymentRoutes'); // From Step 8
+const paymentRoutes = require('./routes/paymentRoutes'); 
 
 // Load env variables
 dotenv.config();
@@ -42,6 +43,7 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/search', searchRoutes);
 app.use('/api/payments', paymentRoutes);
+app.use('/api/chatbot', chatbotRoutes);
 // Base route test
 app.get('/', (req, res) => {
     res.send('AnnexLink API is running...');
