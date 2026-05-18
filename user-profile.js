@@ -3,7 +3,7 @@ const currentUser = JSON.parse(localStorage.getItem('annexlink_user'));
 
 if (!token) window.location.href = "index.html";
 
-// Get the user ID from the URL (e.g., user-profile.html?id=12345)
+// Get the user ID from the URL (link e auto id add hobe)
 const urlParams = new URLSearchParams(window.location.search);
 const targetUserId = urlParams.get('id');
 

@@ -1,4 +1,4 @@
-// --- Authentication Check ---
+//Authentication Check
 const token = localStorage.getItem('annexlink_token');
 const currentUserStr = localStorage.getItem('annexlink_user');
 
@@ -8,7 +8,7 @@ if (!token || !currentUserStr) {
 
 const currentUser = JSON.parse(currentUserStr);
 
-// Load Navbar Avatar instantly
+//Load Navbar Avatar instantly
 document.addEventListener('DOMContentLoaded', () => {
     const avatarUrl = (!currentUser.avatar || currentUser.avatar === "default-avatar.png") 
         ? `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.name)}&background=0A192F&color=fff` 
@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loadProfile();
 });
 
-// --- Load Profile Data & Reviews ---
+//Load Profile Data & Reviews
 async function loadProfile() {
     try {
         const response = await fetch('http://localhost:8000/api/users/profile', {
@@ -41,7 +41,7 @@ async function loadProfile() {
     }
 }
 
-// --- Fetch Active Posts Count ---
+//Fetch Active Posts Count
 async function fetchMyActivePostsCount() {
     try {
         const response = await fetch('http://localhost:8000/api/posts/mine', {
@@ -56,7 +56,7 @@ async function fetchMyActivePostsCount() {
     } catch (error) { console.error(error); }
 }
 
-// --- Render Profile to the Screen ---
+//Render Profile to the Screen
 function renderProfile(user) {
     // 1. Set text fields with Safety Fallbacks ('N/A' if missing)
     document.getElementById('profile-name').innerText = user.name || "Unknown User";
@@ -92,7 +92,7 @@ function renderProfile(user) {
     // 5. Pre-fill the edit form with current data
     document.getElementById('edit-bio').value = user.bio || "";
     document.getElementById('edit-skills').value = user.skills ? user.skills.join(', ') : "";
-    // --- Render Cover Photo ---
+    //Render Cover Photo
     const coverDiv = document.querySelector('.profile-cover');
     if (user.coverPhoto && user.coverPhoto.trim() !== "") {
         const cleanPath = user.coverPhoto.replace(/\\/g, '/');
@@ -105,7 +105,7 @@ function renderProfile(user) {
     }
 }
 
-// --- Render Logged-in User's Reviews ---
+//Render Logged-in User's Reviews
 function renderMyReviews(reviews) {
     const list = document.getElementById('my-reviews-list');
     if (!list) return;
@@ -143,7 +143,7 @@ function renderMyReviews(reviews) {
     });
 }
 
-// --- Toggle Edit Mode UI ---
+//Toggle Edit Mode UI
 function toggleEditMode() {
     const displayMode = document.getElementById('display-mode');
     const editForm = document.getElementById('edit-profile-form');
@@ -157,7 +157,7 @@ function toggleEditMode() {
     }
 }
 
-// --- Handle Save Profile Changes ---
+//Handle Save Profile Changes
 const editForm = document.getElementById('edit-profile-form');
 if (editForm) {
     editForm.addEventListener('submit', async (e) => {
@@ -169,8 +169,8 @@ if (editForm) {
         const avatarInput = document.getElementById('edit-avatar');
         const avatarFile = avatarInput ? avatarInput.files[0] : null;
 
-         const coverInput = document.getElementById('edit-cover');
-         const coverFile = coverInput ? coverInput.files[0] : null;
+        const coverInput = document.getElementById('edit-cover');
+        const coverFile = coverInput ? coverInput.files[0] : null;
 
         const newSkillsArray = newSkillsString.split(',').map(s => s.trim()).filter(s => s !== "");
 

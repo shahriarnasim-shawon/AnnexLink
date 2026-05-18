@@ -70,7 +70,7 @@ async function markAsRead(notifId, redirectLink) {
         if (redirectLink) {
             window.location.href = redirectLink;
         } else {
-            fetchNotifications(); // Reload list
+            fetchNotifications();
         }
     } catch (error) {
         console.error("Error marking read:", error);
@@ -93,5 +93,4 @@ document.addEventListener('click', function(event) {
     }
 });
 
-// Load on page start
 document.addEventListener('DOMContentLoaded', fetchNotifications);

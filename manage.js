@@ -59,7 +59,7 @@ async function deleteMyPost(postId) {
             method: 'DELETE',
             headers: { 'Authorization': `Bearer ${token}` }
         });
-        if (response.ok) loadMyPosts(); // Reload page to remove deleted post
+        if (response.ok) loadMyPosts();
     } catch (error) {
         console.error(error);
     }
@@ -109,5 +109,4 @@ function renderManageCards(posts, pageType) {
     });
 }
 
-// Start sequence
 document.addEventListener('DOMContentLoaded', loadMyPosts);

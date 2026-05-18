@@ -160,7 +160,7 @@ async function sendMessage() {
             displayMessage(savedMessage, 'sent');
             scrollToBottom();
             socket.emit("new message", savedMessage);
-            loadContacts(); // Instantly reshuffle sidebar to put this chat at the top!
+            loadContacts();
         }
     } catch (error) {
         console.error("Error sending message:", error);

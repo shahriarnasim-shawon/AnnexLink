@@ -252,7 +252,7 @@ function renderFeed(posts) {
                     
                     ${post.createdBy && post.createdBy._id !== currentUser._id ? 
                         `<button class="btn btn-secondary" onclick="window.location.href='chat.html?userId=${post.createdBy._id}'"><i class="far fa-comment-dots"></i> Message</button>
-                         <button class="btn btn-primary" onclick="window.location.href='checkout.html?postId=${post._id}'">${config.primaryBtn}</button>` 
+                        <button class="btn btn-primary" onclick="window.location.href='checkout.html?postId=${post._id}'">${config.primaryBtn}</button>` 
                         : ''}
 
                     ${post.createdBy && post.createdBy._id === currentUser._id ? 
