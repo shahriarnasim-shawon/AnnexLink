@@ -1,9 +1,7 @@
 const Message = require('../models/Message');
 const Notification = require('../models/Notification'); // IMPORT NOTIFICATION MODEL
 
-// @desc    Send a new message
-// @route   POST /api/messages
-// @access  Private
+
 const sendMessage = async (req, res) => {
     try {
         const { receiverId, text } = req.body;
@@ -18,12 +16,12 @@ const sendMessage = async (req, res) => {
             text: text
         });
 
-        // --- NEW: CREATE A NOTIFICATION FOR THE RECEIVER ---
+        // receiver er jonno msg notification
         await Notification.create({
             user: receiverId,
             type: 'Message',
             content: `You have a new message from ${req.user.name}`,
-            relatedLink: `chat.html?userId=${req.user._id}` // Clicking it will open chat with this user!
+            relatedLink: `chat.html?userId=${req.user._id}` 
         });
 
         const populatedMessage = await message.populate('sender', 'name avatar');
@@ -33,9 +31,7 @@ const sendMessage = async (req, res) => {
     }
 };
 
-// @desc    Get chat history
-// @route   GET /api/messages/:userId
-// @access  Private
+
 const getMessages = async (req, res) => {
     try {
         const otherUserId = req.params.userId;
@@ -55,14 +51,12 @@ const getMessages = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
-// @desc    Get all conversations for the sidebar (Ordered by newest)
-// @route   GET /api/messages/conversations
-// @access  Private
+
 const getConversations = async (req, res) => {
     try {
         const myId = req.user._id;
 
-        // Find all messages where I am the sender or receiver, sorted newest to oldest
+        //sorted newest to oldest
         const messages = await Message.find({
             $or: [{ sender: myId }, { receiver: myId }]
         })
@@ -71,14 +65,11 @@ const getConversations = async (req, res) => {
         .sort({ createdAt: -1 });
 
         const conversations = [];
-        const addedUsers = new Set(); // Keep track of users we've already added
+        const addedUsers = new Set();
 
         messages.forEach(msg => {
-            // Determine who the OTHER person in the chat is
             const otherUser = msg.sender._id.toString() === myId.toString() ? msg.receiver : msg.sender;
 
-            // If we haven't added this user to the sidebar yet, add them!
-            // Because we sorted by newest first, this guarantees we save their latest message
             if (otherUser && !addedUsers.has(otherUser._id.toString())) {
                 addedUsers.add(otherUser._id.toString());
                 conversations.push({

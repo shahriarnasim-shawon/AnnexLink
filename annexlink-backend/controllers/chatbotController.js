@@ -1,8 +1,6 @@
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
-// @desc    Ask AnnexLink AI Assistant a question
-// @route   POST /api/chatbot
-// @access  Private
+
 const askChatbot = async (req, res) => {
     try {
         const { message } = req.body;
@@ -26,7 +24,7 @@ const askChatbot = async (req, res) => {
         Keep your answers helpful, friendly, and concise. Do not use markdown formatting like **bold** in your response, just use plain text.
         `;
 
-        // Combine the instruction with the user's message
+        // Combine the instruction with the user's message (chatbot theke msg er reply)
         const prompt = `${systemInstruction}\n\nUser Question: ${message}\nAnswer:`;
 
         const result = await model.generateContent(prompt);

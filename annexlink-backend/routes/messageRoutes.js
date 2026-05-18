@@ -5,7 +5,6 @@ const { protect } = require('../middleware/authMiddleware');
 
 router.route('/').post(protect, sendMessage);
 
-// THIS MUST BE ABOVE /:userId
 router.route('/conversations').get(protect, getConversations); 
 
 router.route('/:userId').get(protect, getMessages);

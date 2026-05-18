@@ -5,9 +5,7 @@ const Report = require('../models/Report');
 const Setting = require('../models/Setting');
 
 
-// @desc    Get platform statistics
-// @route   GET /api/admin/stats
-// @access  Private/Admin
+
 const getPlatformStats = async (req, res) => {
     try {
         const totalUsers = await User.countDocuments();
@@ -40,7 +38,7 @@ const dismissReport = async (req, res) => {
             report.status = 'Dismissed';
             await report.save();
 
-            // Revert user status to Active if no other pending reports exist
+            //user status active hobe jodi kono report exist na kore ar
             const otherReports = await Report.countDocuments({ reportedUser: report.reportedUser, status: 'Pending' });
             if (otherReports === 0) {
                 const user = await User.findById(report.reportedUser);
@@ -86,9 +84,6 @@ const updateSettings = async (req, res) => {
 };
 
 
-// @desc    Get all users for the management table
-// @route   GET /api/admin/users
-// @access  Private/Admin
 const getAllUsers = async (req, res) => {
     try {
         const users = await User.find({}).select('-password');
@@ -98,9 +93,7 @@ const getAllUsers = async (req, res) => {
     }
 };
 
-// @desc    Toggle Ban/Unban user
-// @route   PUT /api/admin/users/:id/ban
-// @access  Private/Admin
+
 const toggleBanUser = async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
@@ -109,7 +102,7 @@ const toggleBanUser = async (req, res) => {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        // Prevent admin from banning themselves
+        // admin can not ban himself
         if (user._id.toString() === req.user._id.toString()) {
             return res.status(400).json({ message: 'You cannot ban yourself' });
         }
@@ -124,9 +117,6 @@ const toggleBanUser = async (req, res) => {
     }
 };
 
-// @desc    Delete user
-// @route   DELETE /api/admin/users/:id
-// @access  Private/Admin
 const deleteUser = async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
@@ -141,9 +131,7 @@ const deleteUser = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
-// @desc    Make a user Admin
-// @route   PUT /api/admin/users/make-admin
-// @access  Private/Admin
+
 const makeAdmin = async (req, res) => {
     try {
         const { email } = req.body;

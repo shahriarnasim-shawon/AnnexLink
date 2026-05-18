@@ -8,7 +8,6 @@ router.route('/')
     .post(protect, upload.single('media'), createPost)
     .get(protect, getFeedPosts);
 
-// ADD THIS NEW ROUTE HERE:
 router.route('/mine').get(protect, getMyPosts);
 
 router.route('/:id')

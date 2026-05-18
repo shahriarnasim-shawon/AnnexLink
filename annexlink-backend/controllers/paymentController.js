@@ -1,9 +1,7 @@
 const Transaction = require('../models/Transaction');
 const Post = require('../models/Post');
 
-// @desc    Process a Payment
-// @route   POST /api/payments
-// @access  Private
+
 const processPayment = async (req, res) => {
     try {
         const { postId, amount, paymentMethod } = req.body;
@@ -11,7 +9,7 @@ const processPayment = async (req, res) => {
         
         if (!post) return res.status(404).json({ message: 'Post not found' });
 
-        // Generate a random mock Transaction ID (e.g., TXN-12345678)
+        //random txn id generate korar jonno
         const transactionId = 'TXN-' + Math.floor(10000000 + Math.random() * 90000000);
 
         const transaction = await Transaction.create({
@@ -29,9 +27,7 @@ const processPayment = async (req, res) => {
     }
 };
 
-// @desc    Get Transaction Receipt
-// @route   GET /api/payments/:id
-// @access  Private
+
 const getTransactionReceipt = async (req, res) => {
     try {
         const transaction = await Transaction.findById(req.params.id)

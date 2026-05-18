@@ -5,8 +5,7 @@ const { protect } = require('../middleware/authMiddleware');
 const upload = require('../middleware/uploadMiddleware');
 
 router.route('/').get(protect, getUsersForChat);
-
-router.route('/top').get(protect, getTopUsers); // MUST BE BEFORE /profile and /:id
+router.route('/top').get(protect, getTopUsers);
 
 router.route('/profile')
     .get(protect, getUserProfile)
@@ -16,7 +15,7 @@ router.route('/profile')
 router.route('/dashboard').get(protect, getUserDashboard);
 router.route('/save-post/:postId').put(protect, toggleSavePost);
 router.route('/:id/report').post(protect, reportUser);
-router.route('/:id').get(protect, getUserById); // Get public profile
-router.route('/:id/reviews').post(protect, addReview); // Leave a review
+router.route('/:id').get(protect, getUserById);
+router.route('/:id/reviews').post(protect, addReview);
 
 module.exports = router;

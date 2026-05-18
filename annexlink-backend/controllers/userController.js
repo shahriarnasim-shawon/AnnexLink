@@ -264,7 +264,7 @@ const toggleSavePost = async (req, res) => {
         if (user.savedPosts.includes(postId)) {
             user.savedPosts = user.savedPosts.filter(id => id.toString() !== postId); // Unsave
         } else {
-            user.savedPosts.push(postId); // Save
+            user.savedPosts.push(postId); // post save korbe
         }
         await user.save();
         res.json({ message: 'Saved posts updated', savedPosts: user.savedPosts });
@@ -275,7 +275,6 @@ const toggleSavePost = async (req, res) => {
 
 
 
-// Update exports to include reportUser!
 module.exports = { getUserProfile, updateUserProfile, addReview, getUsersForChat, getTopUsers, getUserById, getUserDashboard, deleteOwnAccount, reportUser, toggleSavePost };
 
 

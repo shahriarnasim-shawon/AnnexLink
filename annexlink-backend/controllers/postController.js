@@ -1,13 +1,10 @@
 const Post = require('../models/Post');
 
-// @desc    Create a new post (Service, Hiring, Request)
-// @route   POST /api/posts
-// @access  Private (Requires Token)
+
 const createPost = async (req, res) => {
     try {
         const { title, description, type, tags, price } = req.body;
 
-        // Tags might come as a string from FormData, convert back to array
         let parsedTags = tags;
         if (typeof tags === 'string') {
             parsedTags = tags.split(',').map(tag => tag.trim()).filter(tag => tag !== "");
@@ -25,7 +22,7 @@ const createPost = async (req, res) => {
             type,
             tags: parsedTags,
             price,
-            media: mediaPath, // Save the image path!
+            media: mediaPath, 
             createdBy: req.user._id 
         });
 
@@ -35,13 +32,10 @@ const createPost = async (req, res) => {
     }
 };
 
-// @desc    Get all posts for the AnnexFeed
-// @route   GET /api/posts
-// @access  Private (Requires Token)
+
 const getFeedPosts = async (req, res) => {
     try {
         // Fetch all active posts, sorted by newest first
-        // .populate() replaces the 'createdBy' ID with the actual user's name and avatar!
         const posts = await Post.find({ status: 'Active' })
             .populate('createdBy', 'name avatar rating')
             .sort({ createdAt: -1 });
@@ -52,9 +46,7 @@ const getFeedPosts = async (req, res) => {
     }
 };
 
-// @desc    Delete a post
-// @route   DELETE /api/posts/:id
-// @access  Private
+
 const deletePost = async (req, res) => {
     try {
         const post = await Post.findById(req.params.id);
@@ -73,10 +65,7 @@ const deletePost = async (req, res) => {
     }
 };
 
-// Update the exports at the very bottom!
-// @desc    Get logged in user's posts
-// @route   GET /api/posts/mine
-// @access  Private
+
 const getMyPosts = async (req, res) => {
     try {
         // Find posts where the creator is the currently logged-in user
@@ -87,9 +76,7 @@ const getMyPosts = async (req, res) => {
     }
 };
 
-// @desc    Get a single post by ID
-// @route   GET /api/posts/:id
-// @access  Private
+
 const getPostById = async (req, res) => {
     try {
         const post = await Post.findById(req.params.id).populate('createdBy', 'name avatar email');
@@ -100,6 +87,6 @@ const getPostById = async (req, res) => {
     }
 };
 
-// Update exports!
+
 module.exports = { createPost, getFeedPosts, deletePost, getMyPosts, getPostById };
 

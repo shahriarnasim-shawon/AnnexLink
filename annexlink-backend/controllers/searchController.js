@@ -1,9 +1,7 @@
 const User = require('../models/User');
 const Post = require('../models/Post');
 
-// @desc    Global search for Users and Posts
-// @route   GET /api/search?q=keyword
-// @access  Private
+
 const globalSearch = async (req, res) => {
     try {
         const keyword = req.query.q ? req.query.q.trim() : '';

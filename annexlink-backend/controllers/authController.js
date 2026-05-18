@@ -1,8 +1,7 @@
 const User = require('../models/User');
 const generateToken = require('../utils/generateToken');
 
-// @desc    Register a new user
-// @route   POST /api/auth/register
+
 const registerUser = async (req, res) => {
     try {
         const { name, email, password, department, batch, skills } = req.body;
@@ -49,8 +48,7 @@ const registerUser = async (req, res) => {
     }
 };
 
-// @desc    Authenticate user & get token (Login)
-// @route   POST /api/auth/login
+
 const loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -58,7 +56,7 @@ const loginUser = async (req, res) => {
         // Find the user by email
         const user = await User.findOne({ email });
 
-        // Check if user exists AND password matches (using the method we wrote in User.js model)
+        // Check if user exists AND password matches ( User.js model e je method likhsilam)
         if (user && (await user.matchPassword(password))) {
             
             // Check if user is banned

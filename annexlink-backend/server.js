@@ -52,8 +52,6 @@ app.get('/', (req, res) => {
 // Port configuration
 const PORT = process.env.PORT || 8000;
 
-// --- SOCKET.IO INTEGRATION ---
-
 // 1. Create an HTTP server from the Express app
 const server = http.createServer(app);
 

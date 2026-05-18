@@ -1,13 +1,11 @@
 const Notification = require('../models/Notification');
 
-// @desc    Get user's notifications
-// @route   GET /api/notifications
-// @access  Private
+
 const getMyNotifications = async (req, res) => {
     try {
         const notifications = await Notification.find({ user: req.user._id })
             .sort({ createdAt: -1 })
-            .limit(20); // Only get the 20 most recent
+            .limit(20); // latest 20 ta notification show korbe
             
         res.json(notifications);
     } catch (error) {
@@ -15,9 +13,7 @@ const getMyNotifications = async (req, res) => {
     }
 };
 
-// @desc    Mark a notification as read
-// @route   PUT /api/notifications/:id/read
-// @access  Private
+
 const markAsRead = async (req, res) => {
     try {
         const notification = await Notification.findById(req.params.id);

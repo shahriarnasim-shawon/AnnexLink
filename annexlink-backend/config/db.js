@@ -5,11 +5,12 @@ const connectDB = async () => {
         const conn = await mongoose.connect(process.env.MONGO_URI, {
             // useNewUrlParser: true,
             // useUnifiedTopology: true,
+            //eigula newer version e supported na
         });
         console.log(`MongoDB Connected: ${conn.connection.host}`);
     } catch (error) {
         console.error(`Error connecting to MongoDB: ${error.message}`);
-        process.exit(1); // Stop the app if database connection fails
+        process.exit(1); // database fail hole app stop hoye jabe
     }
 };
 

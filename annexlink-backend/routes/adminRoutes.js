@@ -3,7 +3,7 @@ const router = express.Router();
 const { protect, admin } = require('../middleware/authMiddleware');
 const { getPlatformStats, getAllUsers, toggleBanUser, deleteUser, getReports, dismissReport, getSettings, updateSettings, makeAdmin } = require('../controllers/adminController');
 
-// All admin routes must pass BOTH the protect (logged in) and admin (role === 'admin') checks
+
 router.route('/stats').get(protect, admin, getPlatformStats);
 router.route('/users').get(protect, admin, getAllUsers);
 router.route('/users/:id/ban').put(protect, admin, toggleBanUser);
