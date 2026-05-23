@@ -221,15 +221,36 @@ function renderFeed(posts) {
         const isSaved = currentUser.savedPosts && currentUser.savedPosts.includes(post._id);
         const bookmarkIcon = isSaved ? 'fas fa-bookmark' : 'far fa-bookmark';
 
+// --- NEW: REACTION & REPOST LOGIC ---
+        const reactionCount = post.reactions ? post.reactions.length : 0;
+        
+        // Check what reaction the current user gave (if any)
+        let myReaction = null;
+        if (post.reactions) {
+            const reactionObj = post.reactions.find(r => {
+                const rUserId = typeof r.user === 'object' ? r.user._id : r.user;
+                return rUserId === currentUser._id;
+            });
+            if (reactionObj) myReaction = reactionObj.reactionType;
+        }
+
+        const mainReactText = myReaction ? myReaction : '<i class="far fa-thumbs-up"></i> React';
+        const mainReactColor = myReaction ? 'var(--accent-teal)' : 'var(--text-muted)';
+        const mainReactFontWeight = myReaction ? 'bold' : 'normal';
+
+        // Check if it's a repost to add a banner at the top
+        const repostBanner = post.isRepost ? `<div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.8rem;"><i class="fas fa-retweet"></i> <strong>${creatorName}</strong> reposted</div>` : '';
+
         const postElement = document.createElement('div');
         postElement.classList.add('post-card');
         
         postElement.innerHTML = `
+            ${repostBanner}
             <div class="post-header">
                 <div class="user-info">
                     <img src="${creatorAvatar}" alt="${creatorName}" class="avatar" style="object-fit: cover;">
                     <div>
-                        <h4><a href="user-profile.html?id=${post.createdBy ? post.createdBy._id : ''}" style="color:var(--primary-navy);">${creatorName}</a> <span class="text-sm">⭐ ${creatorRating}</span></h4>
+                        <h4><a href="user-profile.html?id=${post.createdBy ? post.createdBy._id : ''}" style="color:var(--primary-navy);">${post.isRepost && post.originalPost ? post.originalPost.createdBy.name : creatorName}</a> <span class="text-sm">⭐ ${creatorRating}</span></h4>
                         <p class="text-sm">${timeSince(post.createdAt)}</p>
                     </div>
                 </div>
@@ -245,14 +266,37 @@ function renderFeed(posts) {
                 ${tagsHTML}
             </div>
             
-            <div class="post-footer">
+            <!-- Social Interaction Bar -->
+            <div style="display: flex; gap: 1.5rem; margin-top: 1rem; margin-bottom: 1rem; align-items: center;">
+                
+                <!-- Reaction Popover Container -->
+                <div class="reaction-container">
+                    <button class="btn btn-outline" style="border: none; padding: 0.5rem; color: ${mainReactColor}; font-weight: ${mainReactFontWeight};">
+                        ${mainReactText} <span class="like-count" style="margin-left:5px; color:var(--text-muted); font-weight:normal;">${reactionCount > 0 ? reactionCount : ''}</span>
+                    </button>
+                    
+                    <div class="reaction-popover">
+                        <button class="react-btn" title="Interested" onclick="sendReaction('${post._id}', '👍 Interested')">👍</button>
+                        <button class="react-btn" title="Helpful" onclick="sendReaction('${post._id}', '❤️ Helpful')">❤️</button>
+                        <button class="react-btn" title="Collaborate" onclick="sendReaction('${post._id}', '🤝 Collaborate')">🤝</button>
+                        <button class="react-btn" title="Student Useful" onclick="sendReaction('${post._id}', '🎓 Student Useful')">🎓</button>
+                        <button class="react-btn" title="Trending" onclick="sendReaction('${post._id}', '🔥 Trending')">🔥</button>
+                    </div>
+                </div>
+
+                <button class="btn btn-outline" style="border: none; padding: 0.5rem; color: var(--text-muted);" onclick="repostPost('${post.isRepost ? post.originalPost._id : post._id}')">
+                    <i class="fas fa-retweet"></i> Repost
+                </button>
+            </div>
+
+            <div class="post-footer" style="padding-top: 1rem; border-top: 1px solid var(--border-color);">
                 <div class="post-price">${post.price || 'Negotiable'}</div>
                 <div class="post-actions">
                     <button class="btn btn-outline" onclick="savePost('${post._id}', this)"><i class="${bookmarkIcon}"></i> Save</button>
                     
                     ${post.createdBy && post.createdBy._id !== currentUser._id ? 
                         `<button class="btn btn-secondary" onclick="window.location.href='chat.html?userId=${post.createdBy._id}'"><i class="far fa-comment-dots"></i> Message</button>
-                        <button class="btn btn-primary" onclick="window.location.href='checkout.html?postId=${post._id}'">${config.primaryBtn}</button>` 
+                         <button class="btn btn-primary" onclick="window.location.href='checkout.html?postId=${post._id}'">${config.primaryBtn}</button>` 
                         : ''}
 
                     ${post.createdBy && post.createdBy._id === currentUser._id ? 
@@ -315,4 +359,44 @@ if (logoutBtn) {
         e.preventDefault(); 
         logout();
     });
+}
+// --- 7. Reaction Logic ---
+async function sendReaction(postId, reactionType) {
+    try {
+        const response = await fetch(`http://localhost:8000/api/posts/${postId}/react`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ reactionType })
+        });
+        
+        if (response.ok) {
+            // Instantly reload feed to show updated reaction emoji and count
+            fetchFeed(); 
+        }
+    } catch (error) {
+        console.error("Error reacting to post:", error);
+    }
+}
+
+// --- 8. Repost Logic ---
+async function repostPost(postId) {
+    if (!confirm("Do you want to repost this to your feed?")) return;
+
+    try {
+        const response = await fetch(`http://localhost:8000/api/posts/${postId}/repost`, {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (response.ok) {
+            fetchFeed(); // Instantly reload feed to show the new repost
+        } else {
+            alert("Failed to repost.");
+        }
+    } catch (error) {
+        console.error("Error reposting:", error);
+    }
 }

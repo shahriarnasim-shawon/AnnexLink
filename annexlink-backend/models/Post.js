@@ -16,7 +16,13 @@ const postSchema = new mongoose.Schema({
     applicants:[{ 
         type: mongoose.Schema.Types.ObjectId, 
         ref: 'User' 
-    }]
+    }],
+     reactions: [{ 
+        user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+        reactionType: { type: String } 
+    }],
+    isRepost: { type: Boolean, default: false }, 
+    originalPost: { type: mongoose.Schema.Types.ObjectId, ref: 'Post' } // Links to the original post
 }, { timestamps: true });
 
 module.exports = mongoose.model('Post', postSchema);
