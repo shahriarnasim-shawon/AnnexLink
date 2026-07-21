@@ -45,7 +45,7 @@ app.use('/api/notifications', notificationRoutes);
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Catch-all route to serve index.html for any unknown routes
-app.get('*', (req, res) => {
+app.get(/.*/, (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 app.use('/api/search', searchRoutes);
