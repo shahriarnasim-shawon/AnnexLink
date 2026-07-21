@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AnnexLink | AnnexFeed</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="annexlink_logo.png">
+
+</head>
+
+<body>
+
+    <!-- Top Navbar -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="feed.html" style="display: flex; align-items: center;">
+            <img src="annexlink_logo.png" alt="AnnexLink Logo" style="height: 80px;"> </a>
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" id="global-search" placeholder="Search services, skills, users...">
+                <div id="search-dropdown" class="search-dropdown"></div>
+            </div>
+        </div>
+        <div class="nav-right">
+            <div class="nav-right">
+            <!-- Dark Mode Toggle korbe -->
+            <div class="icon-btn theme-switch" id="theme-toggle" title="Toggle Dark Mode">
+                <i class="fas fa-moon"></i>
+            </div>
+        
+            <!-- Notifications Wrapper -->
+            <div class="notification-wrapper">
+                <div class="icon-btn" id="notif-bell" onclick="toggleNotifications()">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge" id="notif-badge" style="display: none;">0</span>
+                </div>
+                
+                <!-- Notification Dropdown -->
+                <div class="notification-dropdown" id="notif-dropdown">
+                    <div class="notif-header">
+                        <h3>Notifications</h3>
+                    </div>
+                    <div class="notif-list" id="notif-list">
+                        <!-- Dynamic Notifications go here -->
+                    </div>
+                </div>
+            </div>
+            <div class="icon-btn" onclick="window.location.href='chat.html'"><i class="fas fa-envelope"></i></div>
+                <span class="badge">1</span>
+            </div>
+            <img src="https://scontent.fdac1-1.fna.fbcdn.net/v/t39.30808-6/516934099_4146456082346221_103794666320343105_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=53a332&_nc_eui2=AeH8zoOp4RbkY_r1kljCPeJoXqJObffAZw1eok5t98BnDZjEHMPY3DYKqZkvlXZssntr_B5E0ESJ0WJN5n1zwXwU&_nc_ohc=8U_Gxz15DnsQ7kNvwF9qQiS&_nc_oc=AdpdYDztk-ctnvr0nF_jf2R2W2umo2CaAHniFRCWq39PganvnATqxtRMo7EtKOu-oU0&_nc_zt=23&_nc_ht=scontent.fdac1-1.fna&_nc_gid=Km9RWMNbVoG35CpQ2MHtog&_nc_ss=7a3a8&oh=00_AfztY7GENBR2QFKM2H3i80rICT69Litkr_-Q1kYLOwEh8w&oe=69D062FF" alt="Profile" class="avatar">
+        </div>
+    </nav>
+
+    <!-- Main Layout Container -->
+    <div class="container">
+        
+        <!-- Left Sidebar Navigation -->
+        <aside class="sidebar left-sidebar">
+            <ul class="nav-links">
+                <li class="active"><a href="feed.html"><i class="fas fa-home"></i> AnnexFeed</a></li>
+                <li><a href="profile.html"><i class="fas fa-user"></i> Profile</a></li>
+                <li><a href="my-services.html"><i class="fas fa-briefcase"></i> My Services</a></li>
+                <li><a href="my-requests.html"><i class="fas fa-clipboard-list"></i> My Requests</a></li>
+                <li><a href="chat.html"><i class="fas fa-comment-dots"></i> Messages</a></li>
+                <li><a href="dashboard.html"><i class="fas fa-chart-pie"></i> Dashboard</a></li>
+                <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+                <li><a href="index.html" style="color: #E63946;"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Feed Area -->
+        <main class="feed-content">
+            <!-- Create Post Box -->
+            <form id="create-post-form" class="create-post" style="flex-direction: column; align-items: stretch; gap: 1rem;">
+                <div style="display: flex; gap: 1rem; align-items: center; width: 100%;">
+                    <img id="current-user-avatar" src="https://ui-avatars.com/api/?name=User&background=0A192F&color=fff" class="avatar">
+                    <input type="text" id="post-title" placeholder="Post Title (e.g., Selling my BBA Books)" required style="flex:1;">
+                    <select id="post-type" style="padding: 0.8rem; border-radius: 20px; border: 1px solid var(--border-color); outline: none; background: var(--bg-color);">
+                        <option value="Service">Offer Service</option>
+                        <option value="Hiring">Hiring</option>
+                        <option value="Request">Request</option>
+                    </select>
+                </div>
+                <textarea id="post-desc" placeholder="Describe what you are offering or selling..." required style="width: 100%; padding: 0.8rem; border-radius: 12px; border: 1px solid var(--border-color); outline: none; background: var(--bg-color); resize: none; font-family: inherit;" rows="2"></textarea>
+                
+                <div style="display: flex; gap: 1rem; align-items: center;">
+                    <label class="file-upload-btn">
+                        <i class="fas fa-image"></i> Attach
+                        <input type="file" id="post-media" accept="image/*, video/*" onchange="document.getElementById('file-name-display').innerText = this.files[0].name">
+                    </label>
+                    <span id="file-name-display"></span>
+
+                    <input type="text" id="post-tags" placeholder="Tags (e.g., Books, BBA)" style="flex: 2; padding: 0.8rem; border-radius: 20px; border: 1px solid var(--border-color); background: var(--bg-color);">
+                    <input type="text" id="post-price" placeholder="Price (e.g., ৳ 500)" style="flex: 1; padding: 0.8rem; border-radius: 20px; border: 1px solid var(--border-color); background: var(--bg-color);">
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Post</button>
+                </div>
+            </form>
+            <!-- Posts will be injected here via JavaScript -->
+            <div id="annex-feed"></div>
+        </main>
+
+        <!-- Right Sidebar Widgets -->
+        <aside class="sidebar right-sidebar">
+            <div class="widget">
+                <h3>Suggested Services</h3>
+                <ul class="widget-list">
+                    <li>
+                        <div>
+                            <strong>UI/UX Design</strong>
+                            <p class="text-sm">by Ayesha Siddiqa</p>
+                        </div>
+                        <span class="text-sm">⭐ 4.9</span>
+                    </li>
+                    <li>
+                        <div>
+                            <strong>Java Tutoring</strong>
+                            <p class="text-sm">by Fahim Rahman</p>
+                        </div>
+                        <span class="text-sm">⭐ 4.7</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="widget">
+                <h3>Trending Categories</h3>
+                <div class="tags" style="margin-bottom: 0;">
+                    <span class="tag">Web Development</span>
+                    <span class="tag">Video Editing</span>
+                    <span class="tag">Content Writing</span>
+                    <span class="tag">Data Analysis</span>
+                    <span class="tag">Photography</span>
+                </div>
+            </div>
+        </aside>
+
+    </div>
+
+    <script src="notifications.js"></script>
+    <script src="feed.js"></script>
+    <script src="search.js"></script>
+    <script src="theme.js"></script>
+    <script src="ai-assistant.js"></script>
+</body>
+</html>

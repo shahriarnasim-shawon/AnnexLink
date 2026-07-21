@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AnnexLink | Admin Panel</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="annexlink_logo.png">
+</head>
+<body>
+
+    <!-- Top Navbar -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="feed.html" class="logo-text">Annex<span>Link</span> <span style="font-size: 0.9rem; color: #E63946;">ADMIN</span></a>
+        </div>
+        <div class="nav-right">
+            <div class="icon-btn"><i class="fas fa-bell"></i></div>
+            <img src="https://ui-avatars.com/api/?name=Admin&background=E63946&color=fff" alt="Admin" class="avatar">
+        </div>
+    </nav>
+
+    <!-- Main Layout Container (2 Columns) -->
+    <div class="container admin-container">
+        
+        <!-- Left Sidebar Navigation -->
+        <aside class="sidebar left-sidebar">
+            <ul class="nav-links">
+    <li><a href="feed.html"><i class="fas fa-home"></i> Go to AnnexFeed</a></li>
+    <li class="active"><a href="admin.html"><i class="fas fa-shield-alt"></i> Dashboard</a></li>
+    <li><a href="admin-users.html"><i class="fas fa-users"></i> Users</a></li>
+    <li><a href="admin-reports.html"><i class="fas fa-flag"></i> Reports</a></li>
+    <li><a href="admin-settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+    <li><a href="index.html" style="color: #E63946;"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+</ul>
+        </aside>
+
+        <!-- Main Admin Area -->
+        <main class="admin-content">
+            
+            <div class="admin-header">
+                <h2>Platform Overview</h2>
+                <button class="btn btn-primary" onclick="downloadAdminReport()"><i class="fas fa-download"></i> Download Report</button>
+            </div>
+
+        <!-- Admin Statistics -->
+            <div class="admin-stats">
+                <div class="stat-card-admin">
+                    <h3>Total Users</h3>
+                    <p id="admin-total-users">...</p>
+                </div>
+                <div class="stat-card-admin">
+                    <h3>Active Posts</h3>
+                    <p id="admin-active-posts">...</p>
+                </div>
+                <div class="stat-card-admin">
+                    <h3>Total Reviews</h3>
+                    <p id="admin-total-reviews">...</p>
+                </div>
+                <div class="stat-card-admin">
+                    <h3>Pending Reports</h3>
+                    <p id="admin-pending-reports">0</p>
+                </div>
+            </div>
+
+            <!-- User Management Section -->
+            <div class="admin-section">
+                <h3>User Management</h3>
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Department & Batch</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-users-table">
+                        
+                    </tbody>
+                </table>
+            </div>
+
+        </main>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>

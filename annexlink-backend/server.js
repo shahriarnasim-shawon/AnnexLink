@@ -41,13 +41,16 @@ app.use('/api/users', userRoutes);
 app.use('/api/messages', messageRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/notifications', notificationRoutes);
+// --- SERVE FRONTEND STATIC FILES ---
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Catch-all route to serve index.html for any unknown routes
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
 app.use('/api/search', searchRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/chatbot', chatbotRoutes);
-// Base route test
-app.get('/', (req, res) => {
-    res.send('AnnexLink API is running...');
-});
 
 // Port configuration
 const PORT = process.env.PORT || 8000;
